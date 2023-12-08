@@ -109,7 +109,7 @@ app.post('/saveAvatar', upload.single('file'),async function (req,res){
 });
 
 app.get('/.well-known/apple-developer-merchantid-domain-association',function (req,res){
-	 res.sendFile(__dirname, '.well-known/apple-developer-merchantid-domain-association');
+	 res.sendFile(path.join(__dirname, '.well-known/apple-developer-merchantid-domain-association'));
 });
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
