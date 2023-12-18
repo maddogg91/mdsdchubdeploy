@@ -14,6 +14,7 @@ const session = await Stripe.checkout.sessions.create({
       quantity: 1
     }
   ],
+  allow_promotion_codes: true,
   mode: 'payment',
   success_url: `${url}/success?id=${id}`,
   cancel_url: `${url}/cancel?id=${id}`,
