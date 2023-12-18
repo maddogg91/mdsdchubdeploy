@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const port = 3000
-
+var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 
 
@@ -39,6 +39,7 @@ function getApp(path, passport){
   }));
   app.use(passport.initialize());
   app.set('views', path.join(__dirname, 'templates'));
+  app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
   app.use(express.static('public'));
