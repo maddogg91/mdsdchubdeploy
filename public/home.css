@@ -30,7 +30,7 @@ background: radial-gradient(circle, rgba(195,124,27,.7) 0%, rgba(40,3,3,.7) 100%
   box-shadow: 5px 10px 2px  rgb(195,124,27);
   text-shadow: 2px 2px 2px rgb(195,124,27, .5);
   left: 35%;
-  top: 75%;
+  top: 85%;
 }
 .logo{
   position: relative;
