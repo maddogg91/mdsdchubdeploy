@@ -43,6 +43,11 @@ app.get('/privacy', function(req,res){
 
 })
 
+app.get('/cookies', function(req,res){
+  res.render(path.join(__dirname, 'templates/cookies.html'))
+
+})
+
 app.get('/logout', function(req,res){
   req.session.user= '';
   req.session.projects='';
