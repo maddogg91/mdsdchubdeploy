@@ -138,7 +138,7 @@ body{
 
 #bg 
 {	
-height: 1000px;
+height: 850px;
 width: 100%;
 background-color: #ebcbae;
 
@@ -190,6 +190,14 @@ background-color: #ebcbae;
   .home-text-body{
     font-size: 10px;
   }
+  .cen{ width: 45%;}
+  .home-img{
+   position: absolute;
+   top: 50%;
+   width: 35%;
+  height: auto;
+  }
+  
 }
 
 
@@ -214,7 +222,7 @@ background-color: #ebcbae;
   }
   .cb{
     top: 65%;
-    left: 12%;
+    left: 15%;
   }
   .ad{
     top: 15%;
@@ -231,9 +239,13 @@ background-color: #ebcbae;
     font-size: 10px;
   }
   .home-img{
-   width: 45%;
-  height: 25%;
+	    position: absolute;
+		top: 50%;
+   width: 35%;
+  height: auto;
   }
+  .cen{ width: 45%;}
+  
 }
 
 @media only screen and (min-width: 50px) and (max-width: 320px) {
@@ -245,4 +257,12 @@ background-color: #ebcbae;
   .home-text-body{
     font-size: 10px;
   }
+  .cen{ width: 45%;}
+  .home-img{
+   position: absolute;
+   top: 50%;
+   width: 35%;
+  height: auto;
+  }
+
 }
