@@ -190,7 +190,7 @@ background-color: #ebcbae;
   .home-text-body{
     font-size: 10px;
   }
-  .cen{ width: 45%;}
+  .cen{ width: 45%; display: none;}
   .home-img{
    position: absolute;
    top: 50%;
@@ -244,7 +244,7 @@ background-color: #ebcbae;
    width: 35%;
   height: auto;
   }
-  .cen{ width: 45%;}
+  .cen{ width: 45%;display: none;}
   
 }
 
@@ -257,7 +257,7 @@ background-color: #ebcbae;
   .home-text-body{
     font-size: 10px;
   }
-  .cen{ width: 45%;}
+  .cen{ width: 45%;display: none;}
   .home-img{
    position: absolute;
    top: 50%;
