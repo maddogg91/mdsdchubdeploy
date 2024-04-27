@@ -4,14 +4,18 @@ const fs = require('fs');
 const CryptoJS = require('crypto-js');
 const user= process.env['USE'];
 const pass= process.env['PASS'];
-const url= 'mongodb+srv://'+user+':'+pass+'@cluster0.4grai.mongodb.net';
-//const url = 'mongodb://localhost:27017/';
-const client = new MongoClient(url);
+const url= 'mongodb+srv://'+user+':'+pass+'@cluster0.4grai.mongodb.net/';
+const client = new MongoClient(url, {
+        serverApi: {
+            version: ServerApiVersion.v1,
+            strict: true,
+            deprecationErrors: true
+			}
+        }
+		);
 const multer  = require('multer');
 const emails= require('./config/email.js')
-
-
-client.connect();
+connect();
 const database= client.db("mdgportal");
 const users= database.collection("users");
 const requests= database.collection("requests");
@@ -22,6 +26,16 @@ const verifications= database.collection("verify")
 trashedNotification.createIndex({ date: 1 }, { expireAfterSeconds: 2592000 });
 archived.createIndex({ date: 1 }, { expireAfterSeconds: 2592000 });
 verifications.createIndex({ date: 1 }, { expireAfterSeconds: 1800});
+
+async function connect(){
+	try {
+		await client.connect();
+	}
+	 catch (error) {
+       console.log(error);
+    }
+}
+
 
 function enc(txt){
 
