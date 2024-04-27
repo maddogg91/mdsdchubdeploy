@@ -117,8 +117,8 @@ app.get('/.well-known/apple-developer-merchantid-domain-association',function (r
 	 res.sendFile(path.join(__dirname, '.well-known/apple-developer-merchantid-domain-association'));
 });
 const port = process.env.PORT || 8080;
-app.listen(8000, () => {
-  
+app.listen(port, () => {
+  console.log("Starting Server on port #: " + port)
 });
 
 module.exports=app;
