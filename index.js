@@ -87,6 +87,18 @@ app.post('/profile', async function(req, res){
 
 });
 
+app.get('/contractor', function(req,res){
+	res.render(path.join(__dirname, 'templates/404.html'));
+})
+
+app.get('/contact', function(req,res){
+	res.render(path.join(__dirname, 'templates/404.html'));
+})
+
+app.get('/404', function(req,res){
+	res.render(path.join(__dirname, 'templates/404.html'));
+})
+
 app.post('/saveAvatar', upload.single('file'),async function (req,res){
   var tmp_path = req.file.path;
   var filename= String(Math.floor(Math.random() * 90000) + 10000);
