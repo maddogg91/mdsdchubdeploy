@@ -92,7 +92,7 @@ app.get('/contractor', function(req,res){
 })
 
 app.get('/contact', function(req,res){
-	res.render(path.join(__dirname, 'templates/404.html'));
+	res.render(path.join(__dirname, 'templates/contact.html'));
 })
 
 app.get('/404', function(req,res){
