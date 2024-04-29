@@ -9,9 +9,17 @@
 html, body {
   text-align: center;
   height: 100%;
-  background: rgb(195,124,27);
-background: radial-gradient(circle, rgba(195,124,27,.7) 0%, rgba(40,3,3,.7) 100%);
-  overflow-x: hidden;
+  background: black;
+  
+
+}
+#top-level{
+	background-color: #c0c0c0;
+}
+
+.cont{
+	background: url("images/registerbg.png");
+	height: 100%;
 }
 
 .step-bar {
@@ -43,7 +51,7 @@ background: radial-gradient(circle, rgba(195,124,27,.7) 0%, rgba(40,3,3,.7) 100%
 
 .step-bar .line {
   background-color: #fff;
-  width: 180px;
+  width: 200px;
   height: 5px;
   position: absolute;
   top: 15px;
@@ -81,12 +89,13 @@ background: radial-gradient(circle, rgba(195,124,27,.7) 0%, rgba(40,3,3,.7) 100%
   color: #E57373;
 }
 
-h1 {
+h2 {
   margin: 75px 0;
   display: block;
-  color: #fff;
+  color: #777;
   font-size: 1.15em;
   text-transform: uppercase;
+  text-align: center;
   margin-bottom: 20px;
   font-weight: 200;
 }
@@ -115,7 +124,7 @@ h1 {
 .button {
   display: inline-block;
   padding: 10px 40px;
-  background-color:rgb(195,124,27);
+  background-color:black;
   color: #fff;
   margin: 25px 0  10px 0;
   user-select: none;
@@ -161,7 +170,7 @@ h1 {
 
 .line {
   transition: all 1s ease-in-out;
-  background: linear-gradient(to right, #6A1B9A 50%, white 50%);
+  background: linear-gradient(to right, black 50%, white 50%);
   background-size: 200% 100%;
   background-position: right bottom;
 }
@@ -175,7 +184,7 @@ label {
   text-align: left;
   font-size: 0.8em;
   padding-left: 5px;
-  color: #444;
+  color: black;
 }
 
 input[type=checkbox]{
@@ -193,7 +202,7 @@ input::placeholder {
 label{
   font-size: 14px;
   text-align: center;
- color:rgb(195,124,27);
+ black;
   text-shadow: .5px .5px .5px black;
 }
 
