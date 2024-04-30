@@ -125,6 +125,10 @@ app.post('/saveAvatar', upload.single('file'),async function (req,res){
 */
 });
 
+app.post('/contact', function(req,res){
+	console.log(req.body);
+})
+
 app.get('/.well-known/apple-developer-merchantid-domain-association',function (req,res){
 	 res.sendFile(path.join(__dirname, '.well-known/apple-developer-merchantid-domain-association'));
 });

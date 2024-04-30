@@ -15,12 +15,21 @@
 	
   </head>
   <body>
+  <style>
+  .webform{
+	position: relative;
+
+	height: 500px;
+	
+	}
+  </style>
   <script>   $(document).ready(function(){    $("#includedContent").load("footer.html");
 		$("#navbar").load("navbar.html");
 
    }) </script>
     <nav id="navbar"></nav>
 	<div class="container-fluid">
+	<div class="webform">
     <h2 id= "alert" style="display: none"><%= al %></h2>
 	<div>
     <div class="login">
@@ -33,6 +42,7 @@
       No Account? 
      <a href='/register' > <button class="btn btn-dark btn-block btn-small">Register Here</button></a>
 	 </div>
+</div>
 </div>
 </div>
     <script>
