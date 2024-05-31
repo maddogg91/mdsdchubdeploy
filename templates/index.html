@@ -21,6 +21,18 @@
   <body>
    <script>   $(document).ready(function(){    $("#includedContent").load("footer.html");
 		$("#navbar").load("navbar.html");
+		console.log("test");
+		var is_mobile = false;
+
+		if( $('#some-element').css('display')=='none') {
+			is_mobile = true;       
+		}
+
+		// now I can use is_mobile to run javascript conditionally
+
+		if (is_mobile == true) {
+			alert("MOBILE");
+		}
 
    }) </script>
    <nav id="navbar"></nav>
@@ -30,7 +42,7 @@
 	  <img style="width:100%" src="/images/custom.png"/>
 	 
 	 </div>
-	    <div><img style="width:100%" src="/images/wwd.png"/></div>
+	    <div><img id="mobile" style="width:100%" src="/images/wwd.png"/></div>
     <div id="bg">
 	
     <div class="container">

@@ -136,6 +136,49 @@ body{
   transform: scale(1.2); 
 }
 
+.backdroptitle{
+	position: absolute;
+  font-size: 80px;
+  top: 8px;
+  left: 16px;
+  font-weight: bolder;
+  color: white;
+  
+    text-shadow: 2px 2px 4px black;
+}
+
+.backdropsubtitle{
+	position: absolute;
+	font-size: 50px;
+  top: 300px;
+  left: 16px;
+  font-weight: bolder;
+  color: #fbe482;
+  width: 1400px;
+  text-shadow: 2px 2px 8px black;
+}
+
+#backdrop{
+		filter: blur(4px);
+  -webkit-filter: blur(4px);
+	
+}
+
+.topbackdrop{
+	position: relative;
+
+
+}
+
+.btnbackdrop{
+	position: absolute;
+	top: 600px;
+	width: 250px;
+	
+	height: 100px;
+  left: 300px;
+  opacity: .8;
+}
 #bg 
 {	
 height: 850px;
@@ -167,11 +210,7 @@ background-color: #ebcbae;
   }
 }
 
-@media only screen and (min-width: 1080px) and (max-width: 1370px) {
-
-}
-
-@media only screen and (min-width: 720px) and (max-width: 1080px) {
+@media only screen and (min-width: 760px) and (max-width: 1080px) {
    .home-text{
     font-size: 28px;
     word-spacing: normal;
@@ -179,33 +218,22 @@ background-color: #ebcbae;
   .home-text-body{
     font-size: 10px;
   }
-}
 
-@media only screen and (min-width: 480px) and (max-width: 720px) {
-   .home-text{
-    font-size: 28px;
-   
-  }
- 
-  .home-text-body{
-    font-size: 10px;
-  }
-  .cen{ width: 45%; display: none;}
-  .home-img{
-   position: absolute;
-   top: 50%;
-   width: 35%;
-  height: auto;
-  }
-  
 }
 
 
-
-
-
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-  .logo{
+@media only screen and (max-width: 760px) {
+	.backdroptitle{
+		font-size: 40px;
+	}
+	.backdropsubtitle{
+		font-size: 25px;
+		top: 120px;
+		  width: 400px;
+	}
+	
+  #some-element { display: none; }
+   .logo{
     left: -99px;
   }
   .copyright{
@@ -244,25 +272,8 @@ background-color: #ebcbae;
    width: 35%;
   height: auto;
   }
-  .cen{ width: 45%;display: none;}
-  
+  #bg{ display: none;}
+   #some-element { display: none; }
 }
-
-@media only screen and (min-width: 50px) and (max-width: 320px) {
-   .home-text{
-    font-size: 28px;
-     word-spacing: normal;
-     letter-spacing: normal;
-  }
-  .home-text-body{
-    font-size: 10px;
-  }
-  .cen{ width: 45%;display: none;}
-  .home-img{
-   position: absolute;
-   top: 50%;
-   width: 35%;
-  height: auto;
-  }
-
+ .btnbackdrop{left:100px}
 }

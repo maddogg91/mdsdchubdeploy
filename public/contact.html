@@ -62,25 +62,61 @@
 		border-radius: 0px 0px 25px 25px;
 		opacity: .7;
 	}
+@media only screen and (max-width: 760px) {
 
+	body{
+		height: 100vh;
+	}
+	#mobilewwd{
+		z-index: -1;
+		filter: blur(4px);
+  -webkit-filter: blur(4px);
+  position: relative;
+	}
+	
+	.contact{
+		
+		width: 0%;
+		height: 0%;
+		position:relative;
+		left:0 !important ;
+		top: 0 !important ;
+		right:0 !important;
+		bottom:0 !important;
+	}
+	.title{ display: none;}
+	.formbg{width: 350px;}
+	.ask-form{width: 100%; }
+	
+}
  </style>
   </head>
   <body>
    <script>   $(document).ready(function(){    $("#includedContent").load("footer.html");
 		$("#navbar").load("navbar.html");
+		var is_mobile = false;
+
+		if( $('#some-element').css('display')=='none') {
+			is_mobile = true;       
+		}
+	
+		// now I can use is_mobile to run javascript conditionally
+
+		if (is_mobile == true) {
+				$('#mobilewwd').attr('src',"/images/contactanimationmobile.png");
+				
+				
+		}
 
    }) </script>
    <nav id="navbar"></nav>
-   
+    <div id="some-element"></div>  
    <div class="container-fluid">
-	  
-		
 	  <div class="contact">
 	  <div class="title">Ask Us Anything!<hr></div>
-	  
 	  <div class="formbg">
 
-<form method="POST" >
+<form class="ask-form" method="POST" >
   <div class="form-group">
     <label for="name">Name</label> 
     <div class="input-group">
@@ -93,14 +129,14 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="emal">Email Address</label> 
+    <label for="email">Email Address</label> 
     <div class="input-group">
       <div class="input-group-prepend">
         <div class="input-group-text">
           <i class="fa fa-envelope"></i>
         </div>
       </div> 
-      <input id="emal" name="emal" placeholder="Email Address" type="text" required="required" class="form-control">
+      <input id="email" name="email" placeholder="Email Address" type="text" required="required" class="form-control">
     </div>
   </div>
   <div class="form-group">
@@ -127,7 +163,8 @@
 </form> 
 </div>
 	  </div>
-	  <img style="width:100%;" src="/images/contactanimation.svg"/>
+	  <img 	id="mobilewwd"  style="width:100%;" src="/images/contactanimation.svg"/>
+	  
 		
 	 </div>
 	  
