@@ -156,6 +156,7 @@ body{
   color: #fbe482;
   width: 1200px;
   text-shadow: 2px 2px 8px black;
+  
 }
 
 #backdrop{
@@ -187,7 +188,9 @@ background-color: #ebcbae;
 
 }
 
-@media only screen and (min-width: 1920px) {
+
+/* ---XXL Large screen --- */
+@media screen and (min-width: 1920px) {
   .cb{
     left: 40%;
   }
@@ -203,14 +206,25 @@ background-color: #ebcbae;
 }
 }
 
-@media only screen and (min-width: 1370px) and (max-width: 1605px) {
+/* ---Extra Large Screens --- */
+@media screen and (min-width: 1201px) and (max-width: 1919px) {
  .home-text-body{
     padding-top: 40%;
    font-size: 28px;
   }
+  .backdropsubtitle{font-size: 30px;}
+  
 }
 
-@media only screen and (min-width: 760px) and (max-width: 1080px) {
+/* ---Desktops, Large screens--- */
+@media screen and (min-width: 1025px) and (max-width: 1200px){
+  .backdropsubtitle{font-size: 20px;}
+  
+}
+
+
+/* ---Small Screens Laptops--- */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
    .home-text{
     font-size: 28px;
     word-spacing: normal;
@@ -218,11 +232,19 @@ background-color: #ebcbae;
   .home-text-body{
     font-size: 10px;
   }
-
+.backdropsubtitle{font-size: 20px;}
 }
 
 
-@media only screen and (max-width: 760px) {
+/* ---Tablet--- */
+@media screen and (min-width: 481px) and (max-width: 760px){
+.backdropsubtitle{ font-size: 20px}
+	
+}
+
+
+/* ---Mobile--- */
+@media only screen and (min-width: 320px) and (max-width: 480px) {
 	.backdroptitle{
 		font-size: 40px;
 	}
@@ -230,6 +252,7 @@ background-color: #ebcbae;
 		font-size: 25px;
 		top: 120px;
 		  width: 400px;
+		
 	}
 	
   #some-element { display: none; }
@@ -276,4 +299,6 @@ background-color: #ebcbae;
    #some-element { display: none; }
 }
  .btnbackdrop{left:100px}
+}
+
 }
