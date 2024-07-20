@@ -92,7 +92,7 @@ app.get('/contractor', function(req,res){
 })
 
 app.get('/contact', function(req,res){
-	res.render(path.join(__dirname, 'templates/404.html'));
+	res.render(path.join(__dirname, 'templates/contact.html'));
 })
 
 app.get('/404', function(req,res){
@@ -124,6 +124,10 @@ app.post('/saveAvatar', upload.single('file'),async function (req,res){
 });
 */
 });
+
+app.post('/contact', function(req,res){
+	console.log(req.body);
+})
 
 app.get('/.well-known/apple-developer-merchantid-domain-association',function (req,res){
 	 res.sendFile(path.join(__dirname, '.well-known/apple-developer-merchantid-domain-association'));

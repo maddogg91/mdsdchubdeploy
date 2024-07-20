@@ -21,16 +21,33 @@
   <body>
    <script>   $(document).ready(function(){    $("#includedContent").load("footer.html");
 		$("#navbar").load("navbar.html");
+		
+		var is_mobile = false;
+
+		if( $('#some-element').css('display')=='none') {
+			is_mobile = true;       
+		}
+	
+		// now I can use is_mobile to run javascript conditionally
+
+		if (is_mobile == true) {
+				$('#mobilewwd').attr('src',"/images/wwdmobile.png");
+				$('#backdrop').attr('src', "/images/backdrop1m.png");
+				
+		}
 
    }) </script>
    <nav id="navbar"></nav>
-   <div>
-
+   <div class="topbackdrop">
+	 <div id="some-element"></div>
       
-	  <img style="width:100%" src="/images/custom.png"/>
-	 
+	  <img id="backdrop" style="width:100%" src="/images/backdrop1.png"/> 
+	  <div class="backdroptitle">Maddogg Software <br> Custom Development</div> 
+	  <div class="backdropsubtitle">Our aim is to put the power of a software developer into the hands of consumers.
+	  Contact one of our experts to find out how we can build a solution for your business. </div>
+	  <a href= "/contact"><button type="button" class="btnbackdrop btn btn-light">Learn More</button></a>
 	 </div>
-	    <div><img style="width:100%" src="/images/wwd.png"/></div>
+	    <div><img id="mobilewwd" style="width:100%" src="/images/wwd.png"/></div>
     <div id="bg">
 	
     <div class="container">
@@ -48,7 +65,7 @@
       <div class="center">
         <img class="cen ad-img" src="/images/options.png"/>		
 		<img class="home-img" src="/images/MdgLogo.gif"/>
-		<a href= "/register" <button class= "cb btn btn-dark">GET STARTED</button></a>
+		<a href= "/register" <button class= "cb btn btn-dark">Create Account</button></a>
          
        
       </div>

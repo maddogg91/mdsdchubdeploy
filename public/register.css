@@ -8,18 +8,21 @@
 
 html, body {
   text-align: center;
-  height: 100%;
-  background: black;
+
+  
   
 
 }
+
+
 #top-level{
 	background-color: #c0c0c0;
+	height:100%;
 }
 
 .cont{
 	background: url("images/registerbg.png");
-	height: 100%;
+	
 }
 
 .step-bar {
@@ -48,7 +51,9 @@ html, body {
   font-weight: 700;
   z-index: 1;
 }
-
+.step-bar ul{
+	width: 1024px;
+}
 .step-bar .line {
   background-color: #fff;
   width: 200px;
