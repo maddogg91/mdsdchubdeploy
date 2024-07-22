@@ -4,15 +4,17 @@ const passport = require('passport');
 const app = require('./config/app.js').getApp(path, passport);
 const upload = multer({ dest: __dirname+ '/tmp/'});
 const fs = require('fs');
+var nodemailer = require('nodemailer');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const db= require('./mongoinfo.js');
 const refresh= require('./refresh.js');
 const register= require('./routes/registration.js')(app, path, db);
 const login= require('./routes/login.js')(app,path,db);
 const google= require('./routes/google.js')(app, passport, db);
 const customer= require('./routes/customer.js')(app, path, db);
+const email= require('./routes/email.js')(app,path);
 //const admin= require('./hidden/admin.js')(app, db, refresh, path);
-var nodemailer = require('nodemailer');
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'templates/index.html'));
@@ -125,9 +127,6 @@ app.post('/saveAvatar', upload.single('file'),async function (req,res){
 */
 });
 
-app.post('/contact', function(req,res){
-	console.log(req.body);
-})
 
 app.get('/.well-known/apple-developer-merchantid-domain-association',function (req,res){
 	 res.sendFile(path.join(__dirname, '.well-known/apple-developer-merchantid-domain-association'));
