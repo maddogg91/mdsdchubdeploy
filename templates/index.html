@@ -4,6 +4,14 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Our aim is to put the power to develop websites, applications, and interfaces in the hands of the consumers. Software development for small businesses.">
+<meta name="keywords" content="software development, websites, mobile applications, andriod, ios, web applications, seo, training, resources">
+<meta name="robots" content="index, follow">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="language" content="English">
+<meta name="revisit-after" content="30 days">
+<meta name="author" content="Maddogg Software">
+
 <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <!-- Bootstrap CSS -->
@@ -15,34 +23,39 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 	
-    <title>MADDOGG SOFTWARE</title>
+    <title>MADDOGG SOFTWARE Development Portal</title>
  
   </head>
   <body>
    <script>   $(document).ready(function(){    $("#includedContent").load("footer.html");
 		$("#navbar").load("navbar.html");
-		console.log("test");
+		
 		var is_mobile = false;
 
 		if( $('#some-element').css('display')=='none') {
 			is_mobile = true;       
 		}
-
+	
 		// now I can use is_mobile to run javascript conditionally
 
 		if (is_mobile == true) {
-			alert("MOBILE");
+				$('#mobilewwd').attr('src',"/images/wwdmobile.png");
+				$('#backdrop').attr('src', "/images/backdrop1m.png");
+				
 		}
 
    }) </script>
    <nav id="navbar"></nav>
-   <div>
-
+   <div class="topbackdrop">
+	 <div id="some-element"></div>
       
-	  <img style="width:100%" src="/images/custom.png"/>
-	 
+	  <img id="backdrop" style="width:100%" src="/images/backdrop1.png"/> 
+	  <div class="backdroptitle">Maddogg Software <br> Custom Development</div> 
+	  <div class="backdropsubtitle">Our aim is to put the power of a software developer into the hands of consumers.
+	  Contact one of our experts to find out how we can build a solution for your business. </div>
+	  <a href= "/contact"><button type="button" class="btnbackdrop btn btn-light">Learn More</button></a>
 	 </div>
-	    <div><img id="mobile" style="width:100%" src="/images/wwd.png"/></div>
+	    <div><img id="mobilewwd" style="width:100%" src="/images/wwd.png"/></div>
     <div id="bg">
 	
     <div class="container">
@@ -50,7 +63,7 @@
       <div class="left-pane">
            <div class="top ad">
           <h5>Integrate Web Apps to increase productivity</h5>
-          <img id="ad1" class="ad-img" src="/images/HOME.gif"/>
+          <img alt="Web applications for small business owners" id="ad1" class="ad-img" src="/images/HOME.gif"/>
         </div>
        <div class="ad">
           <h5>Upgrade your business with a high quality website</h5>
@@ -60,18 +73,18 @@
       <div class="center">
         <img class="cen ad-img" src="/images/options.png"/>		
 		<img class="home-img" src="/images/MdgLogo.gif"/>
-		<a href= "/register" <button class= "cb btn btn-dark">GET STARTED</button></a>
+		<a href= "/register" <button class= "cb btn btn-dark">Create Account</button></a>
          
        
       </div>
       <div class="right-pane">
         <div class="top ad">
           <h5>Modernize current websites with the latest technologies</h5>
-          <img class="ad-img" src="/images/tt.gif"/>
+          <img alt="Technology Trends (generative ai, animations)" class="ad-img" src="/images/tt.gif"/>
         </div>
         <div class="ad">
           <h5>Update static images with up-to-date animations</h5>
-          <img class="long ad-img" src="/images/bookanimate.gif"/>
+          <img alt="Update animations" class="long ad-img" src="/images/bookanimate.gif"/>
         </div>
       </div>
     </div>
