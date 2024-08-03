@@ -131,6 +131,12 @@ app.post('/saveAvatar', upload.single('file'),async function (req,res){
 app.get('/.well-known/apple-developer-merchantid-domain-association',function (req,res){
 	 res.sendFile(path.join(__dirname, '.well-known/apple-developer-merchantid-domain-association'));
 });
+
+app.get('/sitemap.xml', function(req, res){
+	res.sendFile(path.join(__dirname, 'public/sitemap.xml'));
+});
+
+
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log("Starting Server on port #: " + port)
