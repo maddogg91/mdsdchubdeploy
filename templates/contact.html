@@ -25,7 +25,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<script src="https://www.google.com/recaptcha/api.js?render=6Ld1aDEqAAAAAA3dZAIb2L3i4gRfiIHEVB33LlE2"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer>
+</script>
     <title>Contact Us (Maddogg Software Contact Form)</title>
  <style>
 	
@@ -125,7 +126,7 @@
 	  <div class="title">Ask Us Anything!<hr></div>
 	  <div class="formbg">
 
-<form id="ctcform" class="ask-form" method="POST" enctype="multipart/form-data" >
+<form id="ctc" class="ask-form" method="POST" enctype="multipart/form-data" >
 
   <div class="form-group">
     <label for="name">Name</label> 
@@ -195,34 +196,50 @@
 	<br>
 	<input id="proposal" name="proposal" accept=".pdf, .docx, .doc" type="file"></input>
   </div> 
-  <small>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</small>
   <div class="form-group">
-    <button name="submit" type="submit"  class="g-recaptcha" 
-        data-sitekey="reCAPTCHA_site_key" 
-        data-callback='onSubmit' 
-        data-action='submit'>Submit</button>
+  <div id="g-recaptcha" data-sitekey="6Ld1aDEqAAAAAA3dZAIb2L3i4gRfiIHEVB33LlE2"></div>
+  	<div
+  class="g-recaptcha"
+  data-sitekey="6Ld1aDEqAAAAAA3dZAIb2L3i4gRfiIHEVB33LlE2"
+  data-callback="onRecaptchaSuccess"
+  data-expired-callback="onRecaptchaResponseExpiry"
+  data-error-callback="onRecaptchaError"
+>
+</div>
+ <div
+        id="recaptcha-form-error"
+        style="display: none"
+        class="bg-red-200 rounded py-1 px-2 text-sm sm:text-md"
+      >
+        Please fill the recaptcha checkbox.
+      </div>
+
+      <!-- Recaptcha Success -->
+      <div
+        id="recaptcha-form-success"
+        style="display: none"
+        class="bg-green-200 rounded py-1 px-2 text-sm sm:text-md"
+      >
+        Recaptcha validated Successfully..!
+        <a href="/" class="px-2 text-slate-800">Retry</a>
+      </div>
+
+    <button name="submit" type="submit" class="btn btn-primary">Submit</button>
   </div>
 </form> 
 </div>
 	  </div>
 	  <img alt="contact us"	id="mobilewwd"  style="width:100%;" src="/images/contactanimation.svg"/>
-	  
-		
+	  <small>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</small>
+	
 	 </div>
 	  
    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script>
-	
-	function onClick(e) {
-        e.preventDefault();
-        grecaptcha.ready(function() {
-          grecaptcha.execute('6Ld1aDEqAAAAAA3dZAIb2L3i4gRfiIHEVB33LlE2', {action: 'submit'}).then(function(token) {
-              // Add your logic to submit to your backend server here.
-          });
-        });
-      }
+
+
 	$("input[type='file']").on("change", function() {
   if (this.files[0].size > 8000000) {
     var size = this.files[0].size;
@@ -232,6 +249,47 @@
     return size;
   }
 });
+
+let isRecaptchaValidated = false;
+
+function toggleRecaptchaFormMessage(type = "error", hide = false) {
+  document.getElementById(`recaptcha-form-${type}`).style.display = hide
+    ? "none"
+    : "inherit";
+}
+
+function onRecaptchaSuccess() {
+  isRecaptchaValidated = true;
+}
+
+function onRecaptchaError() {
+  toggleRecaptchaFormMessage("error");
+  toggleRecaptchaFormMessage("success", true);
+}
+
+function onRecaptchaResponseExpiry() {
+  onRecaptchaError();
+}
+
+window.onload = function () {
+  const recaptchaForm = document.getElementById("ctc");
+  recaptchaForm.addEventListener("submit", function (e) {
+  
+    // failure
+    if (!isRecaptchaValidated) {
+      toggleRecaptchaFormMessage("error");
+      toggleRecaptchaFormMessage("success", true);
+	    e.preventDefault();
+      return;
+    }
+
+    // success
+    toggleRecaptchaFormMessage("error", true);
+    toggleRecaptchaFormMessage("success");
+	
+  });
+};
+
 </script>
   </body>
  <footer id="includedContent">

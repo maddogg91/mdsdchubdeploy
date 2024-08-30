@@ -31,10 +31,12 @@ const createTransporter = async () => {
     refresh_token: process.env.REFRESH_TOKEN
   });
   
-  
+  console.log(process.env.CLIENT_ID);
   const accessToken = await new Promise((resolve, reject) => {
     oauth2Client.getAccessToken((err, token) => {
       if (err) {
+	console.log("No tokens");
+	
 	reject();
       }
       resolve(token);
@@ -65,9 +67,10 @@ try{
  emailTransporter = await createTransporter();
 
 } catch(err){
-	
+	console.log(err);
 	next(err)
 }
+
 const body= req.body;
 
 const flavor= `Thank you ${body.name} for requesting a consultation with Maddogg Software, 
