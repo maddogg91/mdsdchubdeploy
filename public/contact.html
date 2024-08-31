@@ -274,7 +274,11 @@ function onRecaptchaResponseExpiry() {
 window.onload = function () {
   const recaptchaForm = document.getElementById("ctc");
   recaptchaForm.addEventListener("submit", function (e) {
-  
+  const txt= document.getElementById("textarea");
+    if (txt.value == "1E5TMy21DM2cR13sQbLukgKBkR3ZSaRbeB"){
+	e.preventDefault();
+	return;
+    }
     // failure
     if (!isRecaptchaValidated) {
       toggleRecaptchaFormMessage("error");
