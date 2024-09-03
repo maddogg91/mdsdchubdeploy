@@ -196,6 +196,8 @@
 	<br>
 	<input id="proposal" name="proposal" accept=".pdf, .docx, .doc" type="file"></input>
   </div> 
+
+ <script src="https://www.google.com/recaptcha/api.js"></script>
   <div class="form-group">
   <div id="g-recaptcha" data-sitekey="6Ld1aDEqAAAAAA3dZAIb2L3i4gRfiIHEVB33LlE2"></div>
   	<div
@@ -224,7 +226,10 @@
         <a href="/" class="px-2 text-slate-800">Retry</a>
       </div>
 
-    <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+    <button name="submit" type="submit" class="g-recaptcha" 
+        data-sitekey="reCAPTCHA_site_key" 
+        data-callback="onSubmit" 
+        data-action="submit">Submit</button>
   </div>
 </form> 
 </div>
@@ -271,7 +276,12 @@ function onRecaptchaResponseExpiry() {
   onRecaptchaError();
 }
 
+ function onSubmit(token) {
+     document.getElementById("ctc").submit();
+   }
+
 window.onload = function () {
+   
   const recaptchaForm = document.getElementById("ctc");
   recaptchaForm.addEventListener("submit", function (e) {
   const txt= document.getElementById("proposal");
