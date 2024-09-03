@@ -63,6 +63,10 @@ const createTransporter = async () => {
 
 app.post('/contact', upload.single('proposal'), async function(req, res, next){
 //var emailTransporter= ''
+if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
+  console.log('Object missing');
+	res.sendFile(path.join(__dirname, '../templates/index.html'));
+}
 try{  
  emailTransporter = await createTransporter();
 
