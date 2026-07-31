@@ -42,7 +42,8 @@ function getApp(path, passport){
   app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')))
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
-  app.use(express.static('public'));
+  app.use(express.static(path.join(__dirname, '..', 'public')));
+  app.use(express.static(path.join(__dirname, '..', 'public', 'app'), { index: false }));
   app.use(express.static('images'));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));

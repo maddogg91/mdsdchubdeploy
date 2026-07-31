@@ -1,33 +1,27 @@
 const {google} = require('googleapis');
 const {authenticate} = require('@google-cloud/local-auth');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var userprofile= ''
-var user= ''
 
 module.exports = function(app, passport, db){
-  
+
   passport.use(new GoogleStrategy({
       clientID: process.env['AUTHID'],
       clientSecret: process.env['AUTHSEC'],
       callbackURL: "https://maddoggsoftware.com/oauth2callback/google/"
     },
     async function(accessToken, refreshToken, profile, done) {
-        userprofile=profile;
-      
-        user =await db.googleAuth(userprofile);
-        return done(null, userprofile);
+        const user= await db.googleAuth(profile);
+        return done(null, user);
     }
   ));
 
   app.get('/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-  //passport.authenticate('youtube'));
 
   app.get('/oauth2callback/google/', passport.authenticate('google', { failureRedirect: '/error' }), function(req,res){
-    const token= req.query.code;
-   
-   // yt.upload('test-short.mp4', 'test-video #Shorts', 'i am testing', 'private', token);
-    req.session.user=user;
-    req.session.token= token;
+    // req.user is set per-request by passport.authenticate() from the verify
+    // callback's done(null, user) above; previously this read a module-level
+    // variable shared across all concurrent requests (a race condition).
+    req.session.user= req.user;
     res.redirect('/dashboard');
 
   });
