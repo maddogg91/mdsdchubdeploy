@@ -17,12 +17,16 @@ const dashboardApi= require('./routes/api/dashboard.js');
 const profileApi= require('./routes/api/profile.js');
 const projectsApi= require('./routes/api/projects.js');
 const notificationsApi= require('./routes/api/notifications.js');
+const contactApi= require('./routes/api/contact.js');
+const checkoutApi= require('./routes/api/checkout.js');
 
 app.use('/api/auth', authApi);
 app.use('/api/dashboard', dashboardApi);
 app.use('/api/profile', profileApi);
 app.use('/api/projects', projectsApi);
 app.use('/api/notifications', notificationsApi);
+app.use('/api/contact', contactApi);
+app.use('/api/checkout', checkoutApi);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'templates/index.html'));
