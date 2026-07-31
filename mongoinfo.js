@@ -73,15 +73,15 @@ async function register(email,pass, name, country, bday, phone){
 	const user= await users.findOne({email: new_user.email});
 	console.log(user);
 	if(!user){
-		users.insertOne(new_user);
+		await users.insertOne(new_user);
     const ver= {
       _id: Math.floor(Math.random()*90000) + 10000,
       email: new_user.email,
       date: new Date().toLocaleString()
     }
-    verifications.insertOne(ver);
+    await verifications.insertOne(ver);
     emails.emailRegistrationCode(ver);
-		return user;
+		return true;
 	}
 	else{
 		console.log("Username exists");

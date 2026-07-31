@@ -12,7 +12,9 @@ const login= require('./routes/login.js')(app,path,db);
 const google= require('./routes/google.js')(app, passport, db);
 const customer= require('./routes/customer.js')(app, path, db);
 const email= require('./routes/email.js')(app,path);
+const authApi= require('./routes/api/auth.js');
 
+app.use('/api/auth', authApi);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'templates/index.html'));
@@ -55,9 +57,9 @@ app.get('/cookies', function(req,res){
 })
 
 app.get('/logout', function(req,res){
-  req.session.user= '';
-  req.session.projects='';
-  res.redirect('/');
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
 });
 
 app.get('/profile', async function(req, res){
@@ -130,6 +132,15 @@ app.get('/.well-known/apple-developer-merchantid-domain-association',function (r
 
 app.get('/sitemap.xml', function(req, res){
 	res.sendFile(path.join(__dirname, 'public/sitemap.xml'));
+});
+
+// SPA catch-all: any path not matched by an API route or one of the legacy
+// pages above falls through to the React app's client-side router. New pages
+// (e.g. /login, /register) get added here as they're migrated off the legacy
+// routes; until a given legacy route above is removed, it still wins since
+// Express matches routes in registration order.
+app.get('*', function(req, res){
+  res.sendFile(path.join(__dirname, 'public/app/index.html'));
 });
 
 const port = process.env.PORT || 8080;

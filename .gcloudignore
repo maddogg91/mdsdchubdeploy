@@ -15,3 +15,12 @@
 
 # Node.js dependencies:
 node_modules/
+
+# React client source/toolchain -- only the built output (public/app/) is
+# deployed; the client itself is built in CI before `gcloud app deploy` runs.
+client/src
+client/node_modules
+client/*.config.js
+client/package*.json
+client/index.html
+client/.gitignore
