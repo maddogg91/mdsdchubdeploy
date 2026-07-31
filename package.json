@@ -1,12 +1,8 @@
 {
-  "name": "functions",
-  "description": "Cloud Functions for Firebase",
+  "name": "mdsdchubdeploy",
+  "description": "Maddogg Software customer portal",
   "scripts": {
-    "serve": "firebase emulators:start --only functions",
-    "shell": "firebase functions:shell",
     "start": "npx nodemon -r dotenv/config index.js",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log",
     "build": "cd client && npm install && npm run build"
   },
   "engines": {
@@ -26,7 +22,6 @@
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.1",
     "express-session": "^1.17.3",
-    "formidable": "^3.5.1",
     "googleapis": "^134.0.0",
     "lien": "^3.4.3",
     "mongodb": "^5.6.0",
@@ -41,9 +36,6 @@
     "serve-favicon": "^2.5.0",
     "stripe": "^14.3.0",
     "youtube-api": "^3.0.1"
-  },
-  "devDependencies": {
-    "firebase-functions-test": "^3.0.0"
   },
   "private": true
 }
