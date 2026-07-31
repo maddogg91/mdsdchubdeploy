@@ -9,6 +9,10 @@ import VerifyPage from './routes/VerifyPage.jsx';
 import ForgotPasswordPage from './routes/ForgotPasswordPage.jsx';
 import ResetPasswordPage from './routes/ResetPasswordPage.jsx';
 import NotFoundPage from './routes/NotFoundPage.jsx';
+import MarketingHomePage from './routes/MarketingHomePage.jsx';
+import ContactPage from './routes/ContactPage.jsx';
+import CancelPage from './routes/CancelPage.jsx';
+import SuccessPage from './routes/SuccessPage.jsx';
 import HomePage from './routes/dashboard/HomePage.jsx';
 import InboxPage from './routes/dashboard/InboxPage.jsx';
 import ProfilePage from './routes/dashboard/ProfilePage.jsx';
@@ -20,13 +24,19 @@ export const router = createBrowserRouter([
   {
     element: <PublicLayout />,
     children: [
+      { path: '/', element: <MarketingHomePage /> },
+      { path: '/contact', element: <ContactPage /> },
       { path: '/login', element: <LoginPage /> },
       { path: '/register', element: <RegisterPage /> },
       { path: '/verify', element: <VerifyPage /> },
       { path: '/forgot', element: <ForgotPasswordPage /> },
-      { path: '/reset', element: <ResetPasswordPage /> }
+      { path: '/reset', element: <ResetPasswordPage /> },
+      { path: '/contractor', element: <NotFoundPage /> },
+      { path: '/404', element: <NotFoundPage /> }
     ]
   },
+  { path: '/cancel', element: <CancelPage /> },
+  { path: '/success', element: <SuccessPage /> },
   {
     element: <ProtectedRoute />,
     children: [

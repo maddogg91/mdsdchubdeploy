@@ -1,0 +1,109 @@
+.topbackdrop {
+  position: relative;
+}
+
+.backdroptitle {
+  position: absolute;
+  font-size: 80px;
+  top: 8px;
+  left: 16px;
+  font-weight: bolder;
+  color: white;
+  text-shadow: 2px 2px 4px black;
+}
+
+.backdropsubtitle {
+  position: absolute;
+  font-size: 32px;
+  top: 300px;
+  left: 16px;
+  font-weight: bolder;
+  color: #fbe482;
+  width: 90%;
+  max-width: 1200px;
+  text-shadow: 2px 2px 8px black;
+}
+
+.btnbackdrop {
+  position: absolute;
+  top: 600px;
+  left: 300px;
+  width: 250px;
+  height: 100px;
+  opacity: 0.8;
+}
+
+#bg {
+  min-height: 850px;
+  width: 100%;
+  background-color: #ebcbae;
+  position: relative;
+}
+
+.left-pane {
+  position: absolute;
+  left: 0;
+  width: 25%;
+}
+
+.right-pane {
+  position: absolute;
+  right: 0;
+  width: 25%;
+}
+
+.center {
+  position: relative;
+  margin: 0 auto;
+  width: 50%;
+  text-align: center;
+}
+
+.ad {
+  position: relative;
+  background-color: black;
+  opacity: 0.7;
+  color: white;
+  text-shadow: 2px 2px 2px slateblue;
+  width: 100%;
+  text-align: center;
+  font-weight: bolder;
+  box-shadow: 5px 10px 2px rgb(195, 124, 27);
+  padding: 1rem;
+}
+
+.ad-img {
+  width: 100%;
+  opacity: 0.9;
+}
+
+.home-img {
+  width: 60%;
+}
+
+.cb {
+  border-radius: 6px;
+  padding: 15px 32px;
+  background-color: ghostwhite;
+  color: black;
+  box-shadow: 5px 10px 2px rgb(195, 124, 27);
+}
+
+@media (max-width: 768px) {
+  .backdroptitle {
+    font-size: 40px;
+  }
+  .backdropsubtitle {
+    font-size: 20px;
+    top: 120px;
+    width: 90%;
+  }
+  .left-pane,
+  .right-pane {
+    position: static;
+    width: 100%;
+  }
+  .center {
+    width: 100%;
+  }
+}
