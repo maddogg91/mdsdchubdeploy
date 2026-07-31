@@ -13,8 +13,16 @@ const google= require('./routes/google.js')(app, passport, db);
 const customer= require('./routes/customer.js')(app, path, db);
 const email= require('./routes/email.js')(app,path);
 const authApi= require('./routes/api/auth.js');
+const dashboardApi= require('./routes/api/dashboard.js');
+const profileApi= require('./routes/api/profile.js');
+const projectsApi= require('./routes/api/projects.js');
+const notificationsApi= require('./routes/api/notifications.js');
 
 app.use('/api/auth', authApi);
+app.use('/api/dashboard', dashboardApi);
+app.use('/api/profile', profileApi);
+app.use('/api/projects', projectsApi);
+app.use('/api/notifications', notificationsApi);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'templates/index.html'));
@@ -63,7 +71,7 @@ app.get('/logout', function(req,res){
 });
 
 app.get('/profile', async function(req, res){
-  refreshProperties('profile', req, res);
+  refresh.refreshProperties('profile', req, res, db, path);
 });
 
 app.get('/archived', async function(req,res){
