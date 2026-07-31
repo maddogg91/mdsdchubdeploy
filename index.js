@@ -5,6 +5,7 @@ const app = require('./config/app.js').getApp(path, passport);
 const upload = multer({ dest: __dirname+ '/tmp/'});
 const fs = require('fs');
 const db= require('./mongoinfo.js');
+const payment= require('./payment.js');
 const refresh= require('./refresh.js');
 const register= require('./routes/registration.js')(app, path, db);
 const login= require('./routes/login.js')(app,path,db);
@@ -17,8 +18,14 @@ app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'templates/index.html'));
 });
 
-app.get('/success', function(req, res) {
+app.get('/success', async function(req, res) {
   const id= req.query.id;
+  const sessionId= req.query.session_id;
+  const verified= id && sessionId && await payment.verifyPayment(sessionId, id);
+  if(!verified){
+    res.redirect('/cancel?id=' + encodeURIComponent(id || ''));
+    return;
+  }
   db.makeFullPayment(id);
   res.sendFile(path.join(__dirname, 'templates/success.html'));
 });
@@ -99,9 +106,15 @@ app.get('/404', function(req,res){
 })
 
 app.post('/saveAvatar', upload.single('file'),async function (req,res){
+  if(!req.session.user){
+    res.writeHead(401);
+    res.end();
+    return;
+  }
   var tmp_path = req.file.path;
   var filename= String(Math.floor(Math.random() * 90000) + 10000);
-  var target_path = 'public/images/user' + String(req.session.user._id) + "/" + filename + req.file.originalname;
+  var safeOriginalName= path.basename(req.file.originalname).replace(/[^a-zA-Z0-9._-]/g, '_');
+  var target_path = 'public/images/user' + String(req.session.user._id) + "/" + filename + safeOriginalName;
   var src = fs.createReadStream(tmp_path);
   var dest = fs.createWriteStream(target_path);
   src.pipe(dest);

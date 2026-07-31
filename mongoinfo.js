@@ -2,6 +2,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const ObjectID = require('mongodb').ObjectId;
 const fs = require('fs');
 const CryptoJS = require('crypto-js');
+const bcrypt = require('bcrypt');
 const user= process.env['USE'];
 const pass= process.env['PASS'];
 const url= 'mongodb+srv://'+user+':'+pass+'@cluster0.4grai.mongodb.net/';
@@ -42,16 +43,25 @@ function enc(txt){
 return  CryptoJS.AES.encrypt(txt, 'mdg').toString();
 }
 
+// Legacy decrypt, kept only to verify passwords stored before the bcrypt migration.
 function dec(data){
   const bytes = CryptoJS.AES.decrypt(data, 'mdg');
   const originalText = bytes.toString(CryptoJS.enc.Utf8);
   return originalText;
 }
 
+function isBcryptHash(value){
+  return typeof value === 'string' && /^\$2[aby]?\$/.test(value);
+}
+
+async function hashPassword(pass){
+  return bcrypt.hash(pass, 12);
+}
+
 async function register(email,pass, name, country, bday, phone){
 	const new_user= {
 		email: email,
-		passw: enc(pass),
+		passw: await hashPassword(pass),
     name: name,
     country: country,
     bday: bday,
@@ -146,12 +156,24 @@ async function loadNotifications(user){
   
   return notif;
 }
-async function updateNotification(body){
-    notifications.updateOne({'_id': new ObjectID(body._id)}, {$set: {'isRead': true}});
+function notificationOwnerFilter(user){
+  return user.usertype== "Admin" ? {'user': "Admin"} : {'user': user._id};
 }
-async function deleteNotification(body){
-  trashedNotification.insertOne(body);
-  notifications.deleteOne({'_id': new ObjectID(body._id)});
+
+async function updateNotification(body, user){
+  const filter= Object.assign({'_id': new ObjectID(body._id)}, notificationOwnerFilter(user));
+  const result= await notifications.updateOne(filter, {$set: {'isRead': true}});
+  return result.matchedCount > 0;
+}
+async function deleteNotification(body, user){
+  const filter= Object.assign({'_id': new ObjectID(body._id)}, notificationOwnerFilter(user));
+  const doc= await notifications.findOne(filter);
+  if(!doc){
+    return false;
+  }
+  trashedNotification.insertOne(doc);
+  await notifications.deleteOne(filter);
+  return true;
 }
 async function loadArchived(body, user){
   const archivedData= {
@@ -214,23 +236,28 @@ async function lookUp(item, source){
 
 async function login(email,pass){
 	const user= await users.findOne({email: email});
-	if(user!= null){
-		if(dec(user.passw) === pass){
-  
-		return user;
-		}
-		else{
-			return null;
-		}
-	}
-	else{
+	if(user== null){
 		return null;
 	}
+
+	if(isBcryptHash(user.passw)){
+		const match= await bcrypt.compare(pass, user.passw);
+		return match ? user : null;
+	}
+
+	// Legacy AES-encrypted password: verify against it, then migrate to bcrypt on success.
+	if(dec(user.passw) === pass){
+		const newHash= await hashPassword(pass);
+		await users.updateOne({'_id': new ObjectID(user._id)}, {$set:{passw: newHash}});
+		user.passw= newHash;
+		return user;
+	}
+	return null;
 }
 async function reset(email,pass){
   const user= await users.findOne({email: email});
   if(user!= null){
-  user.passw= enc(pass);
+  user.passw= await hashPassword(pass);
   users.updateOne({'_id': new ObjectID(user._id)}, {$set:{passw: user.passw}})
   }
 }
@@ -245,34 +272,43 @@ async function notifyUpdate(header, user, notification){
   notifications.insertOne(body);
 }
 
-async function updateRequest(req){
-
-  requests.updateOne({'_id': new ObjectID(req._id)}, {$set: {request: req.request, balance: req.balance} });
+async function updateRequest(req, user){
+  // balance is intentionally excluded here: it must only ever change via
+  // makeFullPayment (a verified Stripe payment), never a client-supplied value.
+  const result= await requests.updateOne(
+    {'_id': new ObjectID(req._id), 'user._id': user._id.toString()},
+    {$set: {request: req.request}}
+  );
+  return result.matchedCount > 0;
 }
 
-async function deleteProject(req){
-  
-  archived.insertOne(req);
-  requests.deleteOne({'_id': new ObjectID(req._id)}, function(err, obj) {
-  if (err) throw err;
-  console.log("1 document deleted");
-  });
+async function deleteProject(req, user){
+  const owned= await requests.findOne({'_id': new ObjectID(req._id), 'user._id': user._id.toString()});
+  if(!owned){
+    return false;
+  }
+  archived.insertOne(owned);
+  await requests.deleteOne({'_id': new ObjectID(req._id)});
+  return true;
+}
+
+async function getRequestForPayment(id, user){
+  return requests.findOne({'_id': new ObjectID(id), 'user._id': user._id.toString()});
 }
 
 async function updateProfile(us, body, path){
 
   us.name= body.name;
   us.email= body.email;
-  if(!body.passwordFlag){
-    us.passw= body.passw
+  if(body.passwordFlag){
+    us.passw= await hashPassword(body.passw);
   }
-  else{
-    us.passw= enc(body.passw);
-  }
+  // else: leave the existing hash untouched, previously this branch overwrote
+  // it with the raw (often empty) form field.
 
   us.phone= body.phone;
   const query= {name: us.name, email: us.email, passw: us.passw, phone: us.phone}
-  
+
   users.updateOne({'_id': new ObjectID(us._id)}, {$set:query})
 }
 
@@ -294,7 +330,7 @@ async function resetPassword(request){
   const tmp= await verifications.findOne({'_id': parseInt(request.code)})
   console.log(tmp);
   if(tmp!= null){
-    users.updateOne({'email': tmp.email}, {$set:{passw: enc(request.password)}});
+    users.updateOne({'email': tmp.email}, {$set:{passw: await hashPassword(request.password)}});
     verifications.deleteOne({'_id': parseInt(request.code)});
     return true;
   }
@@ -376,4 +412,4 @@ async function googleAuth(googleUser){
   
   
 
-module.exports = { register, login, loadRequest, createWebSiteRequest, updateRequest, notifyUpdate, loadNotifications, deleteProject, updateProfile, reset, updateUserAvatar, loadUser, loadArchived, updateNotification, deleteNotification, verify, makeFullPayment, resendVerification, createResetToken, resetPassword, googleAuth};
+module.exports = { register, login, loadRequest, createWebSiteRequest, updateRequest, notifyUpdate, loadNotifications, deleteProject, updateProfile, reset, updateUserAvatar, loadUser, loadArchived, updateNotification, deleteNotification, verify, makeFullPayment, resendVerification, createResetToken, resetPassword, googleAuth, getRequestForPayment};

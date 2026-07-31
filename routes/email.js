@@ -1,6 +1,7 @@
 module.exports= function(app, path){
 const {google} = require('googleapis');
 var nodemailer = require('nodemailer');
+const axios = require('axios');
 var aiemail= process.env['ADEMAIL'];
 var aipass= process.env['ADPASS'];
 const multer = require("multer");
@@ -63,16 +64,30 @@ const createTransporter = async () => {
 
 app.post('/contact', upload.single('proposal'), async function(req, res, next){
 
-var gcaptcha= req.body.g-recaptcha-response;
+var gcaptcha= req.body['g-recaptcha-response'];
 
 if(!gcaptcha){
 console.log("ERROR MALICIOUS ATTEMPT FOUND");
 res.sendFile(path.join(__dirname, '../templates/index.html'));
+return;
+}
+
+const verify= await axios.post('https://www.google.com/recaptcha/api/siteverify', null, {
+  params: {
+    secret: process.env['RECAPTCHA_SECRET'],
+    response: gcaptcha
+  }
+});
+if(!verify.data.success){
+console.log("ERROR RECAPTCHA VALIDATION FAILED");
+res.sendFile(path.join(__dirname, '../templates/index.html'));
+return;
 }
 
 if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
   console.log('Object missing');
 	res.sendFile(path.join(__dirname, '../templates/index.html'));
+	return;
 }
 
 

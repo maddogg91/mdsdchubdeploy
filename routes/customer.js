@@ -4,11 +4,22 @@ module.exports = function(app, path, db){
   const refresh= require('../refresh.js');
   
   app.post('/customerPay', async function (req, res){
-   let sessionurl= '';
-    url= `${req.protocol}://${req.get('host')}`
+    if(!req.session.user){
+      res.writeHead(401);
+      res.end();
+      return;
+    }
 
-    amount = req.body.balance * 100;
-   sessionurl= await payment.payment(amount, url, res, req.body._id);
+    const project= await db.getRequestForPayment(req.body._id, req.session.user);
+    if(!project){
+      res.writeHead(404);
+      res.end();
+      return;
+    }
+
+    const url= `${req.protocol}://${req.get('host')}`;
+    const amount= project.balance * 100;
+    const sessionurl= await payment.payment(amount, url, res, req.body._id);
     res.writeHead(200, {'content-type': 'text/plain'});
     res.end(sessionurl);
 
@@ -40,18 +51,30 @@ module.exports = function(app, path, db){
   });
 
   app.post('/websiterequest', async function(req,res){
+    if(!req.session.user){
+      res.redirect('/');
+      return;
+    }
     const body= req.body;
     db.createWebSiteRequest(req.session.user, body, "website");
     req.session.projects= await db.loadRequest(req.session.user);
     res.redirect('/manage');
   });
   app.post('/webapprequest', async function(req,res){
+    if(!req.session.user){
+      res.redirect('/');
+      return;
+    }
     const body= req.body;
     db.createWebSiteRequest(req.session.user, body, "webapp");
     req.session.projects= await db.loadRequest(req.session.user);
     res.redirect('/manage');
   });
   app.post('/mobilerequest', async function(req,res){
+    if(!req.session.user){
+      res.redirect('/');
+      return;
+    }
     const body= req.body;
     db.createWebSiteRequest(req.session.user, body, "mobile");
     req.session.projects= await db.loadRequest(req.session.user);
@@ -59,27 +82,51 @@ module.exports = function(app, path, db){
 
   });
   app.post('/update', async function(req,res){
+    if(!req.session.user){
+      res.redirect('/');
+      return;
+    }
     const body= req.body;
-    db.updateRequest(body);
+    await db.updateRequest(body, req.session.user);
     req.session.projects= await db.loadRequest(req.session.user);
     res.redirect('/manage');
   });
   app.post('/updatenotification', async function(req,res){
+    if(!req.session.user){
+      res.writeHead(401);
+      res.end();
+      return;
+    }
     const body= req.body;
-    db.updateNotification(body);
+    await db.updateNotification(body, req.session.user);
     req.session.notifications= await db.loadNotifications(req.session.user);
   });
   app.post('/deletenotification', async function(req,res){
+    if(!req.session.user){
+      res.writeHead(401);
+      res.end();
+      return;
+    }
     const body= req.body;
-    db.deleteNotification(body);
+    await db.deleteNotification(body, req.session.user);
     req.session.notifications= await db.loadNotifications(req.session.user);
   });
   app.post('/deleteproject', async function(req, res){
+    if(!req.session.user){
+      res.writeHead(401);
+      res.end();
+      return;
+    }
     const body= req.body;
-    db.deleteProject(body);
+    await db.deleteProject(body, req.session.user);
     req.session.projects= await db.loadRequest(req.session.user);
   })
   app.post('/notifyupdate', async function(req,res){
+    if(!req.session.user){
+      res.writeHead(401);
+      res.end();
+      return;
+    }
     const body= req.body;
     const header= "Request for Project Update";
     const user= "Admin";
