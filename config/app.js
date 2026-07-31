@@ -29,8 +29,13 @@ function getApp(path, passport){
   app.use(sessions({
     secret: process.env['SESSION'],
     saveUninitialized:true,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 },
-    resave: true 
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    },
+    resave: true
   }));
   app.use(passport.initialize());
   app.set('views', path.join(__dirname, 'templates'));

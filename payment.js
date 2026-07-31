@@ -16,10 +16,17 @@ const session = await Stripe.checkout.sessions.create({
   ],
   allow_promotion_codes: true,
   mode: 'payment',
-  success_url: `${url}/success?id=${id}`,
+  metadata: { requestId: id },
+  success_url: `${url}/success?id=${id}&session_id={CHECKOUT_SESSION_ID}`,
   cancel_url: `${url}/cancel?id=${id}`,
   automatic_tax: {enabled: true},
 });
   return session.url;
   };
-module.exports= {payment};
+
+async function verifyPayment(sessionId, id){
+  const session= await Stripe.checkout.sessions.retrieve(sessionId);
+  return session.payment_status === 'paid' && session.metadata && session.metadata.requestId === id;
+}
+
+module.exports= {payment, verifyPayment};
