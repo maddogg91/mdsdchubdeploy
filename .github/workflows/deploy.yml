@@ -34,3 +34,5 @@ jobs:
 
       - name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v2
+        with:
+          deliverables: app.yml
