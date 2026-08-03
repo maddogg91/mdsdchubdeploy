@@ -1,0 +1,34 @@
+.site-navbar {
+  background: #fff !important;
+  box-shadow: 0 1px 0 rgba(15, 15, 26, 0.06);
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+}
+
+.site-navbar .navbar-brand {
+  height: 34px;
+  width: auto;
+}
+
+.site-navbar .nav-link {
+  font-weight: 500;
+  color: #4a4760;
+}
+
+.site-navbar .nav-link:hover {
+  color: #6d5bf6;
+}
+
+.site-navbar .btn-nav-cta {
+  background: linear-gradient(120deg, #6d5bf6, #ff8a5b);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+}
+
+.site-navbar .btn-nav-cta:hover {
+  color: #fff;
+  opacity: 0.92;
+}

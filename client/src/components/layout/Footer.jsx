@@ -42,7 +42,7 @@ export default function Footer() {
           <div className="col-md-8 col-sm-6 col-xs-12">
             <p className="copyright-text">
               Copyright &copy; {new Date().getFullYear()} All Rights Reserved by{' '}
-              <Link style={{ color: 'gold' }} to="/">
+              <Link style={{ color: '#ff8a5b' }} to="/">
                 Maddogg Software Development Ltd Co.
               </Link>
               .{' '}

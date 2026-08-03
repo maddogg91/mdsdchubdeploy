@@ -1,9 +1,9 @@
 .site-footer {
-  background-color: #26272b;
+  background-color: #0f0f1a;
   padding: 45px 0 20px;
   font-size: 15px;
   line-height: 24px;
-  color: #737373;
+  color: #8d8aa3;
 }
 .site-footer hr {
   border-top-color: #bbb;
@@ -17,10 +17,10 @@
   letter-spacing: 2px;
 }
 .site-footer a {
-  color: #737373;
+  color: #8d8aa3;
 }
 .site-footer a:hover {
-  color: #3366cc;
+  color: #ff8a5b;
   text-decoration: none;
 }
 .footer-links {
@@ -31,12 +31,12 @@
   display: block;
 }
 .footer-links a {
-  color: #737373;
+  color: #8d8aa3;
 }
 .footer-links a:active,
 .footer-links a:focus,
 .footer-links a:hover {
-  color: #3366cc;
+  color: #ff8a5b;
   text-decoration: none;
 }
 .copyright-text {
