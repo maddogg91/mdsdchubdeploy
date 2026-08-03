@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useDashboard } from '../../context/DashboardContext.jsx';
+import { FolderIcon, RocketIcon } from '../../components/icons.jsx';
 
 function countByType(projects) {
   return projects.reduce(
@@ -15,72 +16,53 @@ function countByType(projects) {
 }
 
 export default function HomePage() {
-  const { projects, error } = useDashboard();
+  const { user, projects, error } = useDashboard();
   const counts = useMemo(() => countByType(projects), [projects]);
 
   return (
     <div>
-      <div className="welcome">
-        <div className="content rounded-3 p-3">
-          <h1 className="fs-3 text-white">Dashboard</h1>
-        </div>
+      <div className="dash-heading">
+        <h1>Welcome back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}</h1>
+        <p>Here&apos;s a snapshot of your projects.</p>
       </div>
 
-      {error && <p className="text-danger">{error}</p>}
+      {error && <p className="auth-alert">{error}</p>}
 
-      <section className="statistics mt-4">
-        <div className="row">
-          <div className="col-lg-4">
-            <div className="box d-flex rounded-2 align-items-center mb-4 mb-lg-0 p-3">
-              <div className="ms-3">
-                <div className="d-flex align-items-center">
-                  <h3 className="mb-0 text-white">{projects.length}</h3>
-                  <span className="d-block ms-2 text-white">Projects</span>
-                </div>
-                <p className="mb-0">
-                  <Link to="/dashboard/manage">Manage Current Projects</Link>
-                </p>
-              </div>
-            </div>
+      <div className="dash-grid mb-4">
+        <Link to="/dashboard/manage" className="dash-card dash-card-link">
+          <div className="dash-card-icon">
+            <FolderIcon />
           </div>
-          <div className="col-lg-4">
-            <div className="box d-flex rounded-2 align-items-center mb-4 mb-lg-0 p-3">
-              <div className="ms-3">
-                <div className="d-flex align-items-center">
-                  <h3 className="mb-0 text-white">CREATE</h3>
-                  <span className="d-block ms-2 text-white">Request a new project</span>
-                </div>
-                <p className="mb-0">
-                  <Link to="/dashboard/request">Let&apos;s get started</Link>
-                </p>
-              </div>
-            </div>
+          <div>
+            <p className="dash-card-title">{projects.length}</p>
+            <p className="dash-card-label">Manage current projects</p>
           </div>
-        </div>
-      </section>
+        </Link>
+        <Link to="/dashboard/request" className="dash-card dash-card-link">
+          <div className="dash-card-icon accent">
+            <RocketIcon />
+          </div>
+          <div>
+            <p className="dash-card-title">Create</p>
+            <p className="dash-card-label">Request a new project</p>
+          </div>
+        </Link>
+      </div>
 
-      <section className="statis mt-4 text-center">
-        <div className="row">
-          <div className="col-md-6 col-lg-3 mb-4 mb-lg-0">
-            <div className="box bg-primary p-3">
-              <h3>{counts.website}</h3>
-              <p className="lead">Websites</p>
-            </div>
-          </div>
-          <div className="col-md-6 col-lg-3 mb-4 mb-lg-0">
-            <div className="box bg-secondary p-3">
-              <h3>{counts.webapp}</h3>
-              <p className="lead">Web Apps</p>
-            </div>
-          </div>
-          <div className="col-md-6 col-lg-3 mb-4 mb-md-0">
-            <div className="box bg-danger p-3">
-              <h3>{counts.mobile}</h3>
-              <p className="lead">Mobile Apps</p>
-            </div>
-          </div>
+      <div className="dash-grid">
+        <div className="stat-card">
+          <div className="stat-value">{counts.website}</div>
+          <div className="stat-label">Websites</div>
         </div>
-      </section>
+        <div className="stat-card">
+          <div className="stat-value">{counts.webapp}</div>
+          <div className="stat-label">Web Apps</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{counts.mobile}</div>
+          <div className="stat-label">Mobile Apps</div>
+        </div>
+      </div>
     </div>
   );
 }

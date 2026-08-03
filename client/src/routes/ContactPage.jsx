@@ -110,113 +110,88 @@ export default function ContactPage() {
 
   if (submitted) {
     return (
-      <div className="container text-center" style={{ paddingTop: '10vh' }}>
-        <h2>Thank you for reaching out!</h2>
-        <p>Someone from our team will be in touch shortly.</p>
+      <div className="auth-shell">
+        <div className="auth-card text-center">
+          <h1>Thank you for reaching out!</h1>
+          <p className="auth-subtitle">Someone from our team will be in touch shortly.</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container" style={{ paddingTop: '3vh', paddingBottom: '3vh' }}>
-      <h2 className="text-center">Ask Us Anything!</h2>
-      <hr />
-      {error && <p className="text-danger text-center">{error}</p>}
-      <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: 500 }}>
-        <div className="form-group mb-2">
+    <div className="auth-shell">
+      <div className="auth-card auth-card-wide">
+        <h1>Ask us anything</h1>
+        <p className="auth-subtitle">
+          Tell us about your business and we&apos;ll follow up with a plan.
+        </p>
+        {error && <p className="auth-alert">{error}</p>}
+        <form onSubmit={handleSubmit}>
           <label htmlFor="name">Name</label>
-          <input
-            id="name"
-            className="form-control"
-            required
-            value={form.name}
-            onChange={(e) => update('name', e.target.value)}
-          />
-        </div>
-        <div className="form-group mb-2">
-          <label htmlFor="email">Email Address</label>
+          <input id="name" required value={form.name} onChange={(e) => update('name', e.target.value)} />
+
+          <label htmlFor="email">Email address</label>
           <input
             id="email"
             type="email"
-            className="form-control"
             required
             value={form.email}
             onChange={(e) => update('email', e.target.value)}
           />
-        </div>
-        <div className="form-group mb-2">
-          <label htmlFor="phone">Phone Number</label>
+
+          <label htmlFor="phone">Phone number</label>
           <input
             id="phone"
             type="tel"
-            className="form-control"
             required
             value={form.phone}
             onChange={(e) => update('phone', e.target.value)}
           />
-        </div>
-        <div className="form-group mb-2">
-          <label htmlFor="budget">Budget Range</label>
-          <select
-            id="budget"
-            className="form-select"
-            value={form.budget}
-            onChange={(e) => update('budget', e.target.value)}
-          >
+
+          <label htmlFor="budget">Budget range</label>
+          <select id="budget" value={form.budget} onChange={(e) => update('budget', e.target.value)}>
             <option value="$100-$300">Between $100 to $300</option>
             <option value="$300-$1000">Between $300 to $1000</option>
             <option value="$1000+">More than $1000</option>
           </select>
-        </div>
-        <div className="form-group mb-2">
+
           <label htmlFor="time">Availability</label>
-          <select
-            id="time"
-            className="form-select"
-            value={form.time}
-            onChange={(e) => update('time', e.target.value)}
-          >
+          <select id="time" value={form.time} onChange={(e) => update('time', e.target.value)}>
             <option value="8-noon">Between 8am - 12pm</option>
             <option value="noon-5">Between 12pm to 5pm</option>
             <option value="5-night">After 5pm</option>
           </select>
-        </div>
-        <div className="form-group mb-2">
-          <label htmlFor="textarea">Question or Proposal</label>
+
+          <label htmlFor="textarea">Question or proposal</label>
           <textarea
             id="textarea"
-            className="form-control"
             rows={5}
             value={form.textarea}
             onChange={(e) => update('textarea', e.target.value)}
           />
-          <small className="form-text text-muted">
+          <p className="auth-subtitle" style={{ marginTop: '-0.75rem', fontSize: '0.82rem' }}>
             Please be as detailed as possible so our team can put together a plan for your
-            requirements. Your ideas are your own -- we won't share your proposal without written
-            permission. Need an NDA first? Email admin@maddoggsoftware.com directly.
-          </small>
-        </div>
-        <div className="form-group mb-3">
+            requirements. We won&apos;t share your proposal without written permission -- need an
+            NDA first? Email admin@maddoggsoftware.com directly.
+          </p>
+
           <label htmlFor="proposal">Attach a file (max 8MB)</label>
-          <input
-            id="proposal"
-            type="file"
-            accept=".pdf,.docx,.doc"
-            className="form-control"
-            onChange={handleFileChange}
-          />
-          {fileError && <small className="text-danger">{fileError}</small>}
-        </div>
-        <div className="mb-3" ref={recaptchaRef} />
-        <button type="submit" className="btn btn-primary w-100" disabled={submitting}>
-          Submit
-        </button>
-        <small className="d-block text-center mt-2">
-          This site is protected by reCAPTCHA and the Google{' '}
-          <a href="https://policies.google.com/privacy">Privacy Policy</a> and{' '}
-          <a href="https://policies.google.com/terms">Terms of Service</a> apply.
-        </small>
-      </form>
+          <input id="proposal" type="file" accept=".pdf,.docx,.doc" onChange={handleFileChange} />
+          {fileError && <p className="auth-alert">{fileError}</p>}
+
+          <div className="mb-3" ref={recaptchaRef} />
+
+          <button type="submit" className="btn-brand-primary" disabled={submitting}>
+            {submitting ? 'Sending...' : 'Submit'}
+          </button>
+          <p className="auth-footer-link">
+            This site is protected by reCAPTCHA and the Google{' '}
+            <a href="https://policies.google.com/privacy">Privacy Policy</a> and{' '}
+            <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

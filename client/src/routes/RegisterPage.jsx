@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as authApi from '../api/auth.js';
 import { ApiError } from '../api/client.js';
 
 const EMAIL_REGEX = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+const STEPS = ['Account', 'Profile', 'Details'];
 
 function checkPasswordStrength(password) {
   const number = /([0-9])/;
@@ -39,7 +40,7 @@ export default function RegisterPage() {
   function goNextFromStep1() {
     setError('');
     if (!EMAIL_REGEX.test(form.email)) {
-      setError('Email Account is invalid');
+      setError('Please enter a valid email address');
       return;
     }
     if (!form.email || !form.password || !form.confirmPassword) {
@@ -47,7 +48,7 @@ export default function RegisterPage() {
       return;
     }
     if (form.password !== form.confirmPassword) {
-      setError('Password and Confirm Password does not match');
+      setError('Password and confirm password do not match');
       return;
     }
     const strengthError = checkPasswordStrength(form.password);
@@ -82,107 +83,112 @@ export default function RegisterPage() {
   }
 
   return (
-    <div id="top-level" className="container">
-      <div className="step-bar">
-        <ul>
-          <li>
-            <div className={`number${step >= 1 ? ' active' : ''}`}>1</div>
-            <div className="text">account setup</div>
-          </li>
-          <li>
-            <div className={`number${step >= 2 ? ' active' : ''}`}>2</div>
-            <div className="text">profiles</div>
-            <div className={`line${step >= 2 ? ' line-active' : ''}`} />
-          </li>
-          <li>
-            <div className={`number${step >= 3 ? ' active' : ''}`}>3</div>
-            <div className="text">details</div>
-            <div className={`line${step >= 3 ? ' line-active' : ''}`} />
-          </li>
-        </ul>
-      </div>
-      <div className="cont">
-        <h2 style={{ color: 'ghostwhite' }}>Create new account</h2>
-        {error && <p className="text-danger">{error}</p>}
+    <div className="auth-shell">
+      <div className="auth-card">
+        <h1>Create your account</h1>
+        <p className="auth-subtitle">A few quick steps and you&apos;re in.</p>
+
+        <div className="step-bar">
+          {STEPS.map((label, idx) => (
+            <div className={`step${step >= idx + 1 ? ' active' : ''}`} key={label}>
+              <div className="step-number">{idx + 1}</div>
+              <div>{label}</div>
+            </div>
+          ))}
+        </div>
+
+        {error && <p className="auth-alert">{error}</p>}
+
         <form onSubmit={handleSubmit}>
           {step === 1 && (
-            <div className="account-setup register-form">
-              <h2>Step 1</h2>
+            <>
+              <label htmlFor="email">Email</label>
               <input
+                id="email"
                 type="email"
-                placeholder="Email"
+                placeholder="you@example.com"
                 required
                 value={form.email}
                 onChange={(e) => update('email', e.target.value)}
               />
-              <label>
-                Password must be at least six chars, with at least one number &amp; special char
-              </label>
+              <label htmlFor="password">Password</label>
               <input
+                id="password"
                 type="password"
-                placeholder="Password"
+                placeholder="At least 6 characters, 1 number, 1 special character"
                 required
                 value={form.password}
                 onChange={(e) => update('password', e.target.value)}
               />
+              <label htmlFor="confirmPassword">Confirm password</label>
               <input
+                id="confirmPassword"
                 type="password"
-                placeholder="Confirm Password"
+                placeholder="Confirm password"
                 required
                 value={form.confirmPassword}
                 onChange={(e) => update('confirmPassword', e.target.value)}
               />
-              <div className="button firstNext" onClick={goNextFromStep1}>
+              <button type="button" className="btn-brand-primary" onClick={goNextFromStep1}>
                 Next
-              </div>
-            </div>
+              </button>
+            </>
           )}
           {step === 2 && (
-            <div className="user-details register-form">
-              <h2>Step 2</h2>
+            <>
+              <label htmlFor="name">Full name</label>
               <input
+                id="name"
                 type="text"
                 placeholder="Full name"
                 required
                 value={form.name}
                 onChange={(e) => update('name', e.target.value)}
               />
+              <label htmlFor="country">Country</label>
               <input
+                id="country"
                 type="text"
                 placeholder="Country"
                 required
                 value={form.country}
                 onChange={(e) => update('country', e.target.value)}
               />
-              <div className="button firstPrev" onClick={() => setStep(1)}>
-                Back
+              <div className="d-flex gap-2">
+                <button type="button" className="btn-brand-outline w-100" onClick={() => setStep(1)}>
+                  Back
+                </button>
+                <button type="button" className="btn-brand-primary w-100" onClick={goNextFromStep2}>
+                  Next
+                </button>
               </div>
-              <div className="button secondNext" onClick={goNextFromStep2}>
-                Next
-              </div>
-            </div>
+            </>
           )}
           {step === 3 && (
-            <div className="finish-step register-form">
-              <h2>Step 3</h2>
+            <>
               <label htmlFor="birthday">Birth date</label>
               <input
-                className="error"
                 id="birthday"
                 type="date"
                 required
                 value={form.bday}
                 onChange={(e) => update('bday', e.target.value)}
               />
-              <div className="button secondPrev" onClick={() => setStep(2)}>
-                Back
+              <div className="d-flex gap-2">
+                <button type="button" className="btn-brand-outline w-100" onClick={() => setStep(2)}>
+                  Back
+                </button>
+                <button type="submit" className="btn-brand-primary w-100" disabled={submitting}>
+                  {submitting ? 'Creating...' : 'Register'}
+                </button>
               </div>
-              <button type="submit" className="button register" disabled={submitting}>
-                Register
-              </button>
-            </div>
+            </>
           )}
         </form>
+
+        <p className="auth-footer-link">
+          Already have an account? <Link to="/login">Log in</Link>
+        </p>
       </div>
     </div>
   );

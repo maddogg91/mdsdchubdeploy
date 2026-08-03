@@ -1,11 +1,4 @@
-:root {
-  --brand-ink: #0f0f1a;
-  --brand-primary: #6d5bf6;
-  --brand-primary-dark: #4c3cd6;
-  --brand-accent: #ff8a5b;
-  --brand-surface: #f7f6fb;
-  --brand-border: #e6e3f5;
-}
+/* Brand tokens (--brand-*) are defined globally in styles/app.css */
 
 .hero {
   position: relative;

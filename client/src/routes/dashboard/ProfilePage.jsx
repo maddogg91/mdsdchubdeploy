@@ -74,89 +74,94 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <h1 className="text-white">
-        <button type="button" className="btn btn-primary me-2" onClick={() => setEditing((v) => !v)}>
-          {editing ? 'Close' : 'Edit'}
-        </button>
-        User Profile
-      </h1>
+      <div className="dash-heading">
+        <h1>Profile</h1>
+        <p>Your account details and project totals.</p>
+      </div>
 
-      <div className="user-profile text-center">
+      <div className="profile-header">
         <img
-          className="rounded-circle"
-          style={{ width: 120, height: 120, objectFit: 'cover' }}
+          className="profile-avatar"
           src={avatarPreview || user.avatar || DEFAULT_AVATAR}
           onError={(e) => {
             e.currentTarget.src = DEFAULT_AVATAR;
           }}
           alt=""
         />
-        <div className="username text-white fs-4 mt-2">{user.name}</div>
-        <div className="bio text-white">
-          Email: {user.email}
-          <br />
-          Phone: {user.phone}
+        <div>
+          <h2>{user.name}</h2>
+          <p>{user.email}</p>
+          <p>{user.phone}</p>
+          <p>
+            {user.usertype}
+            {user.joindate && ` -- member since ${new Date(user.joindate).toLocaleDateString()}`}
+          </p>
         </div>
-        <div className="description text-white">
-          {user.usertype}
-          <br />
-          {user.joindate && <>Member since {new Date(user.joindate).toLocaleDateString()}</>}
+        <div className="profile-stats">
+          <div>
+            <div className="stat-value">{projectCounts.website}</div>
+            <div className="stat-label">Sites</div>
+          </div>
+          <div>
+            <div className="stat-value">{projectCounts.webapp}</div>
+            <div className="stat-label">Web Apps</div>
+          </div>
+          <div>
+            <div className="stat-value">{projectCounts.mobile}</div>
+            <div className="stat-label">Mobile</div>
+          </div>
         </div>
-        <ul className="data list-unstyled text-white">
-          <li>Sites: {projectCounts.website}</li>
-          <li>Web Apps: {projectCounts.webapp}</li>
-          <li>Mobile Apps: {projectCounts.mobile}</li>
-        </ul>
       </div>
 
+      {!editing && (
+        <button type="button" className="btn-brand-primary" onClick={() => setEditing(true)}>
+          Edit Profile
+        </button>
+      )}
+
       {editing && (
-        <form className="form-container mx-auto" style={{ maxWidth: 400 }} onSubmit={handleSubmit}>
-          <h4>Edit Profile</h4>
-          {error && <p className="text-danger">{error}</p>}
+        <form className="profile-form" onSubmit={handleSubmit}>
+          <h3>Edit Profile</h3>
+          {error && <p className="auth-alert">{error}</p>}
           <label htmlFor="name">Name</label>
-          <input
-            id="name"
-            type="text"
-            className="form-control mb-2"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
           <label htmlFor="email">Email</label>
           <input
             id="email"
             type="email"
-            className="form-control mb-2"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <label htmlFor="password">New Password</label>
+          <label htmlFor="password">New password</label>
           <input
             id="password"
             type="password"
-            className="form-control mb-2"
             placeholder="Leave blank to keep current password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <label htmlFor="phone">Phone</label>
-          <input
-            id="phone"
-            type="text"
-            className="form-control mb-2"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
+          <input id="phone" type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
           <label htmlFor="avatar">Profile photo</label>
           <input
             id="avatar"
             type="file"
             accept="image/*"
-            className="form-control mb-3"
             onChange={handleAvatarChange}
+            style={{ marginBottom: '1.25rem' }}
           />
-          <button type="submit" className="btn btn-primary" disabled={submitting}>
-            Update
-          </button>
+          <div className="d-flex gap-2">
+            <button
+              type="button"
+              className="btn-brand-outline w-100"
+              onClick={() => setEditing(false)}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn-brand-primary w-100" disabled={submitting}>
+              {submitting ? 'Saving...' : 'Save changes'}
+            </button>
+          </div>
         </form>
       )}
     </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import * as authApi from '../api/auth.js';
 import { ApiError } from '../api/client.js';
 
@@ -23,40 +24,39 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="d-flex justify-content-center" style={{ paddingTop: '10vh' }}>
-      <div className="card login-form" style={{ width: 320 }}>
-        <div className="card-body">
-          <h3 className="card-title text-center">Reset password</h3>
-          {sent ? (
-            <p className="text-success">
-              If an account exists for that email, a password reset link has been sent.
+    <div className="auth-shell">
+      <div className="auth-card">
+        <h1>Reset your password</h1>
+        {sent ? (
+          <p className="auth-alert auth-alert-success">
+            If an account exists for that email, a password reset link has been sent.
+          </p>
+        ) : (
+          <>
+            <p className="auth-subtitle">
+              Enter your email and we&apos;ll send you a link to reset your password.
             </p>
-          ) : (
-            <div className="card-text">
-              {error && <p className="text-danger">{error}</p>}
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="email">
-                    Enter your email address and we will send you a link to reset your password.
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    className="form-control form-control-sm"
-                    placeholder="Enter your email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary btn-block" disabled={submitting}>
-                  Send password reset email
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
+            {error && <p className="auth-alert">{error}</p>}
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button type="submit" className="btn-brand-primary" disabled={submitting}>
+                {submitting ? 'Sending...' : 'Send reset email'}
+              </button>
+            </form>
+          </>
+        )}
+        <p className="auth-footer-link">
+          Remembered it? <Link to="/login">Back to log in</Link>
+        </p>
       </div>
     </div>
   );

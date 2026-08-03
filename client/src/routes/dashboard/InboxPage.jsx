@@ -30,57 +30,47 @@ export default function InboxPage() {
   }
 
   return (
-    <div className="container">
-      <h1 className="text-center text-white">Customer Inbox</h1>
-      {error && <p className="text-danger">{error}</p>}
-      <div className="panel panel-default">
-        <table className="table table-striped table-bordered">
-          <thead>
-            <tr>
-              <th></th>
-              <th>ID</th>
-              <th>Subject</th>
-              <th>From</th>
-              <th>Message</th>
-            </tr>
-          </thead>
-          <tbody>
-            {notifications.map((n) => (
-              <tr key={n._id} className={n.isRead ? '' : 'fw-bold'}>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-outline-secondary me-1"
-                    title="Mark As Read"
-                    onClick={() => handleMarkRead(n._id)}
-                  >
-                    Read
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-danger"
-                    title="Delete Message"
-                    onClick={() => handleDelete(n._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-                <td>{n._id}</td>
-                <td>{n.header}</td>
-                <td>{n.notification?.request?.user?.email}</td>
-                <td>{n.notification?.update}</td>
-              </tr>
-            ))}
-            {notifications.length === 0 && (
-              <tr>
-                <td colSpan={5} className="text-center">
-                  No notifications.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+    <div>
+      <div className="dash-heading">
+        <h1>Inbox</h1>
+        <p>Updates and requests related to your projects.</p>
       </div>
+
+      {error && <p className="auth-alert">{error}</p>}
+
+      {notifications.length === 0 ? (
+        <div className="dash-empty">No notifications yet.</div>
+      ) : (
+        <div className="notif-list">
+          {notifications.map((n) => (
+            <div className={`notif-item${n.isRead ? '' : ' unread'}`} key={n._id}>
+              <div className="notif-item-body">
+                <h4>{n.header}</h4>
+                <p>{n.notification?.update}</p>
+                {n.notification?.request?.user?.email && (
+                  <div className="notif-item-meta">From: {n.notification.request.user.email}</div>
+                )}
+              </div>
+              <div className="notif-item-actions">
+                <button
+                  type="button"
+                  className="btn-brand-outline btn-brand-sm"
+                  onClick={() => handleMarkRead(n._id)}
+                >
+                  Mark read
+                </button>
+                <button
+                  type="button"
+                  className="btn-brand-danger"
+                  onClick={() => handleDelete(n._id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
