@@ -23,46 +23,52 @@ export default function LoginPage() {
         navigate('/verify');
         return;
       }
-      setError('Invalid Email or Password');
+      setError('Invalid email or password');
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <div className="container-fluid">
-      <div className="webform" style={{ position: 'relative', height: 500 }}>
-        <div>
-          <div className="login">
-            <h1>Login</h1>
-            {error && <p className="text-danger">{error}</p>}
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="email"
-                placeholder="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button type="submit" className="btn btn-dark btn-block btn-large" disabled={submitting}>
-                Login
-              </button>
-            </form>
-            No Account?{' '}
-            <Link to="/register">
-              <button className="btn btn-dark btn-block btn-small">Register Here</button>
-            </Link>
-          </div>
-        </div>
+    <div className="auth-shell">
+      <div className="auth-card">
+        <h1>Welcome back</h1>
+        <p className="auth-subtitle">Log in to manage your projects and requests.</p>
+
+        {error && <p className="auth-alert">{error}</p>}
+
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="text"
+            name="email"
+            placeholder="you@example.com"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="submit" className="btn-brand-primary" disabled={submitting}>
+            {submitting ? 'Logging in...' : 'Log In'}
+          </button>
+        </form>
+
+        <p className="auth-footer-link">
+          Forgot your password? <Link to="/forgot">Reset it</Link>
+        </p>
+        <p className="auth-footer-link">
+          No account yet? <Link to="/register">Create one</Link>
+        </p>
       </div>
     </div>
   );

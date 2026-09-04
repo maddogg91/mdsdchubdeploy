@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import * as authApi from '../api/auth.js';
 import { ApiError } from '../api/client.js';
 
@@ -55,30 +55,38 @@ export default function ResetPasswordPage() {
 
   if (!code) {
     return (
-      <div className="container text-center" style={{ paddingTop: '10vh' }}>
-        <p>Missing reset code. Please use the link from your password reset email.</p>
+      <div className="auth-shell">
+        <div className="auth-card text-center">
+          <h1>Missing reset code</h1>
+          <p className="auth-subtitle">
+            Please use the link from your password reset email, or{' '}
+            <Link to="/forgot">request a new one</Link>.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <fieldset className="login" style={{ maxWidth: 400, margin: '10vh auto' }}>
-      <legend className="legend">Password Reset</legend>
-      {error && <p className="text-danger">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="input">
-          <label htmlFor="password">Enter new password:</label>
+    <div className="auth-shell">
+      <div className="auth-card">
+        <h1>Choose a new password</h1>
+        <p className="auth-subtitle">
+          Must be at least six characters with a number and a special character.
+        </p>
+
+        {error && <p className="auth-alert">{error}</p>}
+
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="password">New password</label>
           <input
             type="password"
             id="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            title="Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character, and be at least six characters long"
           />
-        </div>
-        <div className="input">
-          <label htmlFor="confirmpassword">Confirm new password:</label>
+          <label htmlFor="confirmpassword">Confirm new password</label>
           <input
             type="password"
             id="confirmpassword"
@@ -86,14 +94,16 @@ export default function ResetPasswordPage() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-        </div>
-        <span id="message" style={{ color: passwordsMatch ? 'green' : 'red' }}>
-          {confirmPassword ? (passwordsMatch ? 'Matching' : 'Not Matching') : ''}
-        </span>
-        <button title="Reset password" type="submit" className="submit" disabled={submitting}>
-          &rarr;
-        </button>
-      </form>
-    </fieldset>
+          {confirmPassword && (
+            <p className={passwordsMatch ? 'auth-alert auth-alert-success' : 'auth-alert'}>
+              {passwordsMatch ? 'Passwords match' : 'Passwords do not match'}
+            </p>
+          )}
+          <button type="submit" className="btn-brand-primary" disabled={submitting}>
+            {submitting ? 'Saving...' : 'Reset password'}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }

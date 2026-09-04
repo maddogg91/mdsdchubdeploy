@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { DashboardProvider, useDashboard } from '../../context/DashboardContext.jsx';
+import { FolderIcon, InboxIcon, LogoutIcon, MenuIcon, UserIcon } from '../icons.jsx';
 import './dashboard.css';
+
+const DEFAULT_AVATAR =
+  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 
 function unreadCount(notifications) {
   return notifications.filter((n) => !n.isRead).length;
+}
+
+function navLinkClass({ isActive }) {
+  return `sidebar-link${isActive ? ' active' : ''}`;
 }
 
 function DashboardChrome() {
   const { logout } = useAuth();
   const { user, notifications, loading } = useDashboard();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [projectsOpen, setProjectsOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
+  const unread = unreadCount(notifications);
 
   async function handleLogout() {
     await logout();
@@ -29,76 +37,62 @@ function DashboardChrome() {
       <aside className={`dashboard-sidebar${sidebarOpen ? '' : ' hidden'}`}>
         <div className="sidebar-header">
           <img
-            src={user?.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}
+            src={user?.avatar || DEFAULT_AVATAR}
             onError={(e) => {
-              e.currentTarget.src =
-                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+              e.currentTarget.src = DEFAULT_AVATAR;
             }}
             alt=""
           />
-          <h5 className="fs-6 mb-0 mt-2">{user?.name}</h5>
-          <p className="mt-1 mb-0">{user?.usertype}</p>
+          <h5>{user?.name}</h5>
+          <p>{user?.usertype}</p>
         </div>
-        <ul>
-          <li>
-            <button type="button" className="link-like" onClick={() => setProjectsOpen((o) => !o)}>
-              Projects
-            </button>
-            {projectsOpen && (
-              <ul className="sidebar-dropdown">
-                <li>
-                  <Link to="/dashboard/request">Create a project</Link>
-                </li>
-                <li>
-                  <Link to="/dashboard/manage">Manage projects</Link>
-                </li>
-              </ul>
-            )}
-          </li>
-          <li>
-            <Link to="/dashboard/profile">Profile</Link>
-          </li>
-          <li>
-            <Link to="/dashboard/inbox">
-              Mailbox {unreadCount(notifications) > 0 && `(${unreadCount(notifications)})`}
-            </Link>
-          </li>
-          <li>
-            <button type="button" className="link-like" onClick={handleLogout}>
-              Logout
-            </button>
-          </li>
-        </ul>
+        <nav className="sidebar-nav">
+          <NavLink to="/dashboard/request" className={navLinkClass}>
+            <FolderIcon width={20} height={20} />
+            Create a Project
+          </NavLink>
+          <NavLink to="/dashboard/manage" className={navLinkClass}>
+            <FolderIcon width={20} height={20} />
+            Manage Projects
+          </NavLink>
+          <NavLink to="/dashboard/profile" className={navLinkClass}>
+            <UserIcon width={20} height={20} />
+            Profile
+          </NavLink>
+          <NavLink to="/dashboard/inbox" className={navLinkClass}>
+            <InboxIcon width={20} height={20} />
+            Inbox
+            {unread > 0 && <span className="sidebar-badge">{unread}</span>}
+          </NavLink>
+          <button type="button" className="sidebar-link sidebar-link-button" onClick={handleLogout}>
+            <LogoutIcon width={20} height={20} />
+            Logout
+          </button>
+        </nav>
       </aside>
 
       <div className={`dashboard-wrapper${sidebarOpen ? '' : ' fullwidth'}`}>
-        <nav className="dashboard-navbar navbar navbar-expand-md">
-          <div className="container-fluid mx-2">
+        <nav className="dashboard-navbar">
+          <div className="dashboard-navbar-inner">
             <button
               type="button"
-              className="navbar-toggler"
+              className="sidebar-toggle"
               onClick={() => setSidebarOpen((o) => !o)}
               aria-label="Toggle sidebar"
             >
-              <span className="navbar-toggler-icon" />
+              <MenuIcon width={22} height={22} />
             </button>
-            <Link className="navbar-brand" to="/dashboard">
-              <img className="logo" style={{ width: 40 }} src="/images/MdgLogoAlpha.png" alt="" />
-            </Link>
-            <ul className="navbar-nav ms-auto flex-row">
-              <li className="nav-item">
-                <Link className="nav-link" to="/dashboard/inbox">
-                  Inbox
-                  {unreadCount(notifications) > 0 && (
-                    <span className="notif-badge">{unreadCount(notifications)}</span>
-                  )}
-                </Link>
-              </li>
-            </ul>
+            <NavLink to="/dashboard" className="navbar-brand-text">
+              Maddogg Portal
+            </NavLink>
+            <NavLink to="/dashboard/inbox" className="navbar-inbox-link">
+              <InboxIcon width={20} height={20} />
+              {unread > 0 && <span className="navbar-badge">{unread}</span>}
+            </NavLink>
           </div>
         </nav>
 
-        <div className="p-4">
+        <div className="dashboard-content">
           <Outlet />
         </div>
       </div>

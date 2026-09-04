@@ -49,6 +49,7 @@ export default function VerifyPage() {
   async function handleResend() {
     if (!email) return;
     setError('');
+    setInfo('');
     try {
       await authApi.resendVerification(email);
       setInfo(`Verification email sent to ${email}`);
@@ -58,40 +59,46 @@ export default function VerifyPage() {
   }
 
   return (
-    <div className="container">
-      <h2>Verify your account</h2>
-      <p className="info">
-        Check your email account for the verification code. You&apos;ll have 30 minutes to enter
-        it. If you need a new code, enter your email below and click resend.
-      </p>
-      {error && <p className="text-danger">{error}</p>}
-      {info && <p className="text-success">{info}</p>}
-      <div className="code-container">
-        {digits.map((digit, idx) => (
-          <input
-            key={idx}
-            ref={(el) => (inputRefs.current[idx] = el)}
-            type="number"
-            className="code"
-            placeholder="0"
-            min="0"
-            max="9"
-            value={digit}
-            onChange={(e) => handleDigitChange(idx, e.target.value)}
-            onKeyDown={(e) => handleKeyDown(idx, e)}
-          />
-        ))}
+    <div className="auth-shell">
+      <div className="auth-card">
+        <h1>Verify your account</h1>
+        <p className="auth-subtitle">
+          Enter the code we emailed you. It&apos;s valid for 30 minutes -- need a new one? Enter
+          your email below and resend.
+        </p>
+
+        {error && <p className="auth-alert">{error}</p>}
+        {info && <p className="auth-alert auth-alert-success">{info}</p>}
+
+        <div className="code-container">
+          {digits.map((digit, idx) => (
+            <input
+              key={idx}
+              ref={(el) => (inputRefs.current[idx] = el)}
+              type="number"
+              className="code-input"
+              placeholder="0"
+              min="0"
+              max="9"
+              value={digit}
+              onChange={(e) => handleDigitChange(idx, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(idx, e)}
+            />
+          ))}
+        </div>
+
+        <label htmlFor="resend-email">Email address</label>
+        <input
+          id="resend-email"
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <button onClick={handleResend} className="btn-brand-outline" type="button">
+          Resend verification code
+        </button>
       </div>
-      <input
-        className="floating-text"
-        type="text"
-        placeholder="Enter Email Address"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button onClick={handleResend} className="floating-btn" type="button">
-        Resend Verification Code
-      </button>
     </div>
   );
 }

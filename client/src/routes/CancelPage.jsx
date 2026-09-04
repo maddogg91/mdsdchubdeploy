@@ -7,9 +7,11 @@ export default function CancelPage() {
   }, []);
 
   return (
-    <div className="container text-center" style={{ paddingTop: '10vh' }}>
-      <h3>Operation Cancelled</h3>
-      <p>This page will automatically close.</p>
+    <div className="page-shell">
+      <div>
+        <h1>Payment cancelled</h1>
+        <p className="auth-subtitle">This page will close automatically.</p>
+      </div>
     </div>
   );
 }

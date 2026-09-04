@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDashboard } from '../../context/DashboardContext.jsx';
 import * as projectsApi from '../../api/projects.js';
+import { CodeIcon, LayersIcon, RocketIcon } from '../../components/icons.jsx';
 
 const PACKAGE_LABELS = { 1: 'Basic Package', 2: 'Plus Package', 3: 'Premium Package' };
 const TYPE_LABELS = { 1: 'Static', 2: 'Dynamic' };
@@ -12,9 +14,9 @@ const STATUS_PERCENT = {
   complete: 100
 };
 const TYPE_ICON = {
-  website: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
-  webapp: 'https://icon-library.com/images/web-application-icon/web-application-icon-13.jpg',
-  mobile: 'https://cdn-icons-png.flaticon.com/512/5608/5608615.png'
+  website: LayersIcon,
+  webapp: CodeIcon,
+  mobile: RocketIcon
 };
 
 export default function ManagePage() {
@@ -74,71 +76,75 @@ export default function ManagePage() {
     }
   }
 
-  if (!loading && projects.length === 0) {
-    return (
-      <div className="text-center text-white">
-        <p>No projects found.</p>
-        <a href="/dashboard/request">Create your first project</a>
-      </div>
-    );
-  }
-
   return (
     <div>
-      <h1 className="text-white">My Projects</h1>
-      {error && <p className="text-danger">{error}</p>}
-      <div className="row row-cols-1 row-cols-md-auto">
-        {projects.map((p) => (
-          <div className="col mb-4" key={p._id}>
-            <div className="card p-3">
-              <img src={TYPE_ICON[p.type]} style={{ width: 60, height: 60 }} alt="" />
-              <h3>{p.request?.businessname}</h3>
-              <h4>Package: {PACKAGE_LABELS[p.request?.package] ?? p.request?.package}</h4>
-              <p>
-                <b>Project Details:</b>
-                <br />
-                Domain: {p.request?.website}
-                <br />
-                Project Type: {p.type}
-                <br />
-                <small>
-                  <b>Description:</b> {p.request?.desc}
-                </small>
-                <br />
-                <small>Site Type: {TYPE_LABELS[p.request?.type] ?? p.request?.type}</small>
-              </p>
-              <p style={{ color: 'green', fontWeight: 'bold' }}>Project Balance: ${p.balance}</p>
-              <button
-                className="btn btn-primary btn-sm mb-1"
-                disabled={!(p.balance > 0) || busyId === p._id}
-                onClick={() => handlePay(p)}
-              >
-                Pay Now
-              </button>{' '}
-              <button className="btn btn-light btn-sm mb-1" onClick={() => handleRequestUpdate(p)}>
-                Request An Update
-              </button>
-              <br />
-              <small style={{ color: 'blue', fontWeight: 'bold' }}>
-                Lifetime Updates: {p.request?.updates}
-              </small>
-              <br />
-              <small>Request Date: {p.creationdate}</small>
-              <div className="progress mt-2" style={{ height: 20 }}>
-                <div
-                  className="progress-bar"
-                  style={{ width: `${STATUS_PERCENT[p.status] ?? 0}%` }}
-                >
-                  {p.status}
+      <div className="dash-heading">
+        <h1>My Projects</h1>
+        <p>Track progress, request updates, and pay outstanding balances.</p>
+      </div>
+
+      {error && <p className="auth-alert">{error}</p>}
+
+      {!loading && projects.length === 0 ? (
+        <div className="dash-empty">
+          <p className="mb-2">No projects found.</p>
+          <Link to="/dashboard/request">Create your first project</Link>
+        </div>
+      ) : (
+        <div className="project-grid">
+          {projects.map((p) => {
+            const Icon = TYPE_ICON[p.type] ?? LayersIcon;
+            return (
+              <div className="project-card" key={p._id}>
+                <div className="project-card-icon">
+                  <Icon width={22} height={22} />
+                </div>
+                <h3>{p.request?.businessname}</h3>
+                <p className="project-meta">
+                  {PACKAGE_LABELS[p.request?.package] ?? p.request?.package} &middot; Domain:{' '}
+                  {p.request?.website}
+                </p>
+                <p className="project-meta">
+                  {TYPE_LABELS[p.request?.type] ?? p.request?.type} {p.type}
+                </p>
+                {p.request?.desc && <p className="project-meta">{p.request.desc}</p>}
+                <p className="project-balance">Balance: ${p.balance}</p>
+                <p className="project-meta">
+                  Lifetime updates remaining: {p.request?.updates} &middot; Requested{' '}
+                  {p.creationdate}
+                </p>
+
+                <div className="project-progress">
+                  <div
+                    className="project-progress-bar"
+                    style={{ width: `${STATUS_PERCENT[p.status] ?? 0}%` }}
+                  />
+                </div>
+                <div className="project-status-label">{p.status}</div>
+
+                <div className="project-card-actions">
+                  <button
+                    className="btn-brand-primary btn-brand-sm"
+                    disabled={!(p.balance > 0) || busyId === p._id}
+                    onClick={() => handlePay(p)}
+                  >
+                    Pay Now
+                  </button>
+                  <button
+                    className="btn-brand-outline btn-brand-sm"
+                    onClick={() => handleRequestUpdate(p)}
+                  >
+                    Request Update
+                  </button>
+                  <button className="btn-brand-danger" onClick={() => handleDelete(p)}>
+                    Delete
+                  </button>
                 </div>
               </div>
-              <button className="btn btn-light btn-sm mt-2" onClick={() => handleDelete(p)}>
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

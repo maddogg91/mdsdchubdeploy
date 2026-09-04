@@ -6,9 +6,9 @@ const BASE_PRICE = { website: 150, webapp: 350, mobile: 500 };
 const TITLE = { website: 'Website', webapp: 'Web Application', mobile: 'Mobile Application' };
 const PACKAGE_ADDON = { 1: 0, 2: 150, 3: 300 };
 const PACKAGE_LABEL = {
-  1: 'Basic - landing page + 3 pages',
-  2: 'Plus - landing page + 5 pages, 1 free lifetime update',
-  3: 'Premium - landing page + 8 pages, 3 free lifetime updates'
+  1: 'Basic -- landing page + 3 pages',
+  2: 'Plus -- landing page + 5 pages, 1 free lifetime update',
+  3: 'Premium -- landing page + 8 pages, 3 free lifetime updates'
 };
 
 export default function ProjectRequestWizard() {
@@ -38,7 +38,7 @@ export default function ProjectRequestWizard() {
 
   if (!TITLE[type]) {
     return (
-      <div className="text-white text-center">
+      <div className="dash-empty">
         <p>Unknown project type.</p>
       </div>
     );
@@ -67,58 +67,62 @@ export default function ProjectRequestWizard() {
   }
 
   return (
-    <div className="text-white">
-      <h2 className="text-center">{TITLE[type]} Request Form</h2>
-      <h6 className="text-center">Current Subtotal:</h6>
-      <h4 className="text-center">${total}</h4>
-      <p className="text-center text-warning">Does not include taxes. This is an estimate.</p>
+    <div>
+      <div className="dash-heading">
+        <h1>{TITLE[type]} Request</h1>
+        <p>Tell us about the project -- we&apos;ll follow up with a full quote.</p>
+      </div>
 
-      {error && <p className="text-danger text-center">{error}</p>}
+      <form onSubmit={handleSubmit} className="profile-form">
+        <div className="d-flex justify-content-between align-items-baseline mb-3">
+          <span className="dash-card-label">Estimated subtotal</span>
+          <span className="stat-value" style={{ fontSize: '1.5rem' }}>
+            ${total}
+          </span>
+        </div>
+        <p className="project-meta mb-3">Estimate only, excludes tax. We&apos;ll confirm the final quote with you.</p>
 
-      <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: 500 }}>
-        <label>Business Name</label>
+        {error && <p className="auth-alert">{error}</p>}
+
+        <label htmlFor="businessname">Business name</label>
         <input
-          className="form-control mb-2"
+          id="businessname"
           value={form.businessname}
           onChange={(e) => update('businessname', e.target.value)}
         />
 
-        <label>Industry</label>
+        <label htmlFor="industry">Industry</label>
         <input
-          className="form-control mb-2"
+          id="industry"
           value={form.industry}
           onChange={(e) => update('industry', e.target.value)}
         />
 
-        <label>How will you use it?</label>
-        <select
-          className="form-select mb-2"
-          value={form.need}
-          onChange={(e) => update('need', e.target.value)}
-        >
+        <label htmlFor="need">How will you use it?</label>
+        <select id="need" value={form.need} onChange={(e) => update('need', e.target.value)}>
           <option value="marketing">Marketing</option>
           <option value="commerce">E-commerce</option>
           <option value="other">Other</option>
         </select>
 
-        <label>Description</label>
+        <label htmlFor="desc">Description</label>
         <textarea
-          className="form-control mb-2"
+          id="desc"
           rows={4}
           value={form.desc}
           onChange={(e) => update('desc', e.target.value)}
         />
 
-        <label>Desired domain / app name</label>
+        <label htmlFor="website">Desired domain / app name</label>
         <input
-          className="form-control mb-2"
+          id="website"
           value={form.website}
           onChange={(e) => update('website', e.target.value)}
         />
 
-        <label>Static or dynamic?</label>
+        <label htmlFor="siteType">Static or dynamic?</label>
         <select
-          className="form-select mb-2"
+          id="siteType"
           value={form.siteType}
           onChange={(e) => update('siteType', e.target.value)}
         >
@@ -126,45 +130,29 @@ export default function ProjectRequestWizard() {
           <option value="2">Dynamic (+$100)</option>
         </select>
 
-        <label>Package</label>
-        <select
-          className="form-select mb-2"
-          value={form.package}
-          onChange={(e) => update('package', e.target.value)}
-        >
+        <label htmlFor="package">Package</label>
+        <select id="package" value={form.package} onChange={(e) => update('package', e.target.value)}>
           <option value="1">Basic (+$0)</option>
           <option value="2">Plus (+$150)</option>
           <option value="3">Premium (+$300)</option>
         </select>
-        <small>{PACKAGE_LABEL[form.package]}</small>
+        <p className="project-meta mb-3">{PACKAGE_LABEL[form.package]}</p>
 
-        <label className="mt-2">Preferred contact method</label>
-        <select
-          className="form-select mb-2"
-          value={form.contact}
-          onChange={(e) => update('contact', e.target.value)}
-        >
+        <label htmlFor="contact">Preferred contact method</label>
+        <select id="contact" value={form.contact} onChange={(e) => update('contact', e.target.value)}>
           <option value="Phone">Phone Call</option>
           <option value="Email">Email</option>
           <option value="Text">Text</option>
         </select>
 
-        <label>Phone number / email</label>
-        <input
-          className="form-control mb-2"
-          value={form.info}
-          onChange={(e) => update('info', e.target.value)}
-        />
+        <label htmlFor="info">Phone number / email</label>
+        <input id="info" value={form.info} onChange={(e) => update('info', e.target.value)} />
 
-        <label>Additional comments</label>
-        <input
-          className="form-control mb-3"
-          value={form.comment}
-          onChange={(e) => update('comment', e.target.value)}
-        />
+        <label htmlFor="comment">Additional comments</label>
+        <input id="comment" value={form.comment} onChange={(e) => update('comment', e.target.value)} />
 
-        <button type="submit" className="btn btn-primary w-100" disabled={submitting}>
-          Submit
+        <button type="submit" className="btn-brand-primary w-100 mt-2" disabled={submitting}>
+          {submitting ? 'Submitting...' : 'Submit Request'}
         </button>
       </form>
     </div>

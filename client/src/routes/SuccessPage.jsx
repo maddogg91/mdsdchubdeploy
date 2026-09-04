@@ -21,15 +21,17 @@ export default function SuccessPage() {
   }, [searchParams]);
 
   return (
-    <div className="container text-center" style={{ paddingTop: '10vh' }}>
-      {status === 'checking' && <h3>Confirming your payment...</h3>}
-      {status === 'success' && <h3>Payment successful!</h3>}
-      {status === 'failed' && (
-        <>
-          <h3>We couldn&apos;t confirm this payment.</h3>
-          <p>If you were charged, please contact support.</p>
-        </>
-      )}
+    <div className="page-shell">
+      <div>
+        {status === 'checking' && <h1>Confirming your payment...</h1>}
+        {status === 'success' && <h1>Payment successful!</h1>}
+        {status === 'failed' && (
+          <>
+            <h1>We couldn&apos;t confirm this payment</h1>
+            <p className="auth-subtitle">If you were charged, please contact support.</p>
+          </>
+        )}
+      </div>
     </div>
   );
 }
