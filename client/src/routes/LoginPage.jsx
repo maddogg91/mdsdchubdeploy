@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { ApiError } from '../api/client.js';
+import { GoogleIcon } from '../components/icons.jsx';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -34,6 +35,12 @@ export default function LoginPage() {
       <div className="auth-card">
         <h1>Welcome back</h1>
         <p className="auth-subtitle">Log in to manage your projects and requests.</p>
+
+        <a href="/google" className="btn-google">
+          <GoogleIcon />
+          Continue with Google
+        </a>
+        <div className="auth-divider">or</div>
 
         {error && <p className="auth-alert">{error}</p>}
 

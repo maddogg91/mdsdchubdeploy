@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as authApi from '../api/auth.js';
 import { ApiError } from '../api/client.js';
+import { GoogleIcon } from '../components/icons.jsx';
 
 const EMAIL_REGEX = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 const STEPS = ['Account', 'Profile', 'Details'];
@@ -87,6 +88,16 @@ export default function RegisterPage() {
       <div className="auth-card">
         <h1>Create your account</h1>
         <p className="auth-subtitle">A few quick steps and you&apos;re in.</p>
+
+        {step === 1 && (
+          <>
+            <a href="/google" className="btn-google">
+              <GoogleIcon />
+              Sign up with Google
+            </a>
+            <div className="auth-divider">or</div>
+          </>
+        )}
 
         <div className="step-bar">
           {STEPS.map((label, idx) => (

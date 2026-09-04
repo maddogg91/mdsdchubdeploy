@@ -43,3 +43,17 @@ cd client && npm install && npm run dev   # Vite on :5173, proxies /api to :8080
 Visit http://localhost:5173 during development. The production build (`npm run build`) outputs
 static assets to `public/app/`, which Express serves directly -- there is no separate frontend
 server in production.
+
+## Google sign-in
+
+`/login` and `/register` both have a "Continue with Google" / "Sign up with Google" button
+(`routes/google.js`, wired up since before this modernization pass -- the button just makes it
+reachable from the UI). It needs two environment variables set wherever the app runs:
+
+- `AUTHID` -- the OAuth 2.0 Client ID from the Google Cloud Console
+- `AUTHSEC` -- the corresponding Client Secret
+
+In the Google Cloud Console, under that OAuth client's **Authorized redirect URIs**, make sure
+`https://maddoggsoftware.com/oauth2callback/google/` is registered -- it's hardcoded as the
+callback URL in `routes/google.js`. If you ever deploy under a different domain, that URL needs
+to be added there too (and in the Google Cloud Console) or the callback will fail.
