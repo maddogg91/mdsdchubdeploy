@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import { ApiError } from '../api/client.js';
-import { GoogleIcon } from '../components/icons.jsx';
 import { destinationForUser } from '../utils/redirects.js';
 
-export default function LoginPage() {
+export default function ContractorLoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -19,12 +17,10 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       const user = await login(email, password);
+      // ProtectedRoute redirects to /change-password automatically if this
+      // account still has a temporary one-time password.
       navigate(destinationForUser(user));
     } catch (err) {
-      if (err instanceof ApiError && err.status === 403 && err.code === 'NOT_VERIFIED') {
-        navigate('/verify');
-        return;
-      }
       setError('Invalid email or password');
     } finally {
       setSubmitting(false);
@@ -34,14 +30,10 @@ export default function LoginPage() {
   return (
     <div className="auth-shell">
       <div className="auth-card">
-        <h1>Welcome back</h1>
-        <p className="auth-subtitle">Log in to manage your projects and requests.</p>
-
-        <a href="/google" className="btn-google">
-          <GoogleIcon />
-          Continue with Google
-        </a>
-        <div className="auth-divider">or</div>
+        <h1>Contractor Login</h1>
+        <p className="auth-subtitle">
+          Sign in with the email and password provided to you by Maddogg Software.
+        </p>
 
         {error && <p className="auth-alert">{error}</p>}
 
@@ -49,9 +41,8 @@ export default function LoginPage() {
           <label htmlFor="email">Email</label>
           <input
             id="email"
-            type="text"
-            name="email"
-            placeholder="you@example.com"
+            type="email"
+            placeholder="you@maddoggsoftware.com"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -60,7 +51,6 @@ export default function LoginPage() {
           <input
             id="password"
             type="password"
-            name="password"
             placeholder="Password"
             required
             value={password}
@@ -73,9 +63,6 @@ export default function LoginPage() {
 
         <p className="auth-footer-link">
           Forgot your password? <Link to="/forgot">Reset it</Link>
-        </p>
-        <p className="auth-footer-link">
-          No account yet? <Link to="/register">Create one</Link>
         </p>
       </div>
     </div>

@@ -10,6 +10,7 @@ const projectsApi= require('./routes/api/projects.js');
 const notificationsApi= require('./routes/api/notifications.js');
 const contactApi= require('./routes/api/contact.js');
 const checkoutApi= require('./routes/api/checkout.js');
+const adminApi= require('./routes/api/admin.js');
 
 app.use('/api/auth', authApi);
 app.use('/api/dashboard', dashboardApi);
@@ -18,6 +19,7 @@ app.use('/api/projects', projectsApi);
 app.use('/api/notifications', notificationsApi);
 app.use('/api/contact', contactApi);
 app.use('/api/checkout', checkoutApi);
+app.use('/api/admin', adminApi);
 
 // Legacy pages deliberately kept server-rendered: huge static legal text with
 // no interactive behavior worth porting to the SPA (see Phase 3 PR notes).

@@ -53,4 +53,25 @@ function emailRegistrationCode(verification) {
 });
 }
 
-module.exports= {emailRegistrationCode, resetPassword}
+function emailContractorCredentials(contractor, otp){
+  const subject= 'Your Maddogg Software contractor account';
+
+  const flavor= `<!DOCTYPE html> <h4>Hello ${contractor.name}, <br><br> An account has been created for you on the Maddogg Software Contractor Portal.</h4> <br><br> <p>Login email: ${contractor.email}<br> Temporary password: <b>${otp}</b></p> <br><br> <h4>Log in at <a href= 'https://maddoggsoftware.com/contractor'>https://maddoggsoftware.com/contractor</a> -- you'll be asked to set a new password on your first login.</h4> <br><br> <h4> Thank you, <br><br> Maddogg Software Team </h4>`;
+
+  var mailOptions = {
+    from: ademail,
+    to: contractor.email,
+    subject: subject,
+    html: flavor
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+}
+
+module.exports= {emailRegistrationCode, resetPassword, emailContractorCredentials}

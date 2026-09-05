@@ -57,3 +57,24 @@ In the Google Cloud Console, under that OAuth client's **Authorized redirect URI
 `https://maddoggsoftware.com/oauth2callback/google/` is registered -- it's hardcoded as the
 callback URL in `routes/google.js`. If you ever deploy under a different domain, that URL needs
 to be added there too (and in the Google Cloud Console) or the callback will fail.
+
+## Contractor portal
+
+Contractors log in at `/contractor` -- there's no contractor self-registration, accounts are
+only created by an Admin from `/admin`. Setup, one time:
+
+1. Register a normal account for yourself through `/register` (or already have one).
+2. Promote it to Admin -- there's no UI for this bootstrap step since it's a chicken-and-egg
+   problem (the `/admin` page that creates contractors is itself gated behind already being an
+   Admin):
+   ```sh
+   npm run promote-admin -- you@example.com
+   ```
+3. Log in normally at `/login`. Admin accounts are redirected to `/admin` instead of the
+   customer dashboard.
+
+From `/admin`, entering a contractor's name and email (must end `@maddoggsoftware.com`) creates
+their account with a generated one-time password and emails it to them via the same `ADEMAIL`/
+`ADPASS` Gmail credentials `config/email.js` already uses for registration/reset emails. On
+their first login at `/contractor`, they're forced to `/change-password` before reaching
+anything else.

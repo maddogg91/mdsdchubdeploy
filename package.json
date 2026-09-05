@@ -3,7 +3,8 @@
   "description": "Maddogg Software customer portal",
   "scripts": {
     "start": "npx nodemon -r dotenv/config index.js",
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npm run build",
+    "promote-admin": "node -r dotenv/config scripts/promote-admin.js"
   },
   "engines": {
     "node": "18"
