@@ -49,3 +49,10 @@ export function resetPassword(code, password, confirmPassword) {
 export function logout() {
   return apiFetch('/auth/logout', { method: 'POST' });
 }
+
+export function changePassword(currentPassword, newPassword) {
+  return apiFetch('/auth/change-password', {
+    method: 'POST',
+    body: JSON.stringify({ currentPassword, newPassword })
+  });
+}

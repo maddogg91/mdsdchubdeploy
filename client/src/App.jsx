@@ -13,6 +13,10 @@ import MarketingHomePage from './routes/MarketingHomePage.jsx';
 import ContactPage from './routes/ContactPage.jsx';
 import CancelPage from './routes/CancelPage.jsx';
 import SuccessPage from './routes/SuccessPage.jsx';
+import ContractorLoginPage from './routes/ContractorLoginPage.jsx';
+import ContractorDashboardPage from './routes/ContractorDashboardPage.jsx';
+import ChangePasswordPage from './routes/ChangePasswordPage.jsx';
+import AdminPage from './routes/AdminPage.jsx';
 import HomePage from './routes/dashboard/HomePage.jsx';
 import InboxPage from './routes/dashboard/InboxPage.jsx';
 import ProfilePage from './routes/dashboard/ProfilePage.jsx';
@@ -31,7 +35,7 @@ export const router = createBrowserRouter([
       { path: '/verify', element: <VerifyPage /> },
       { path: '/forgot', element: <ForgotPasswordPage /> },
       { path: '/reset', element: <ResetPasswordPage /> },
-      { path: '/contractor', element: <NotFoundPage /> },
+      { path: '/contractor', element: <ContractorLoginPage /> },
       { path: '/404', element: <NotFoundPage /> }
     ]
   },
@@ -39,6 +43,10 @@ export const router = createBrowserRouter([
   { path: '/success', element: <SuccessPage /> },
   {
     element: <ProtectedRoute />,
+    children: [{ path: '/change-password', element: <ChangePasswordPage /> }]
+  },
+  {
+    element: <ProtectedRoute roles={['customer']} />,
     children: [
       {
         path: '/dashboard',
@@ -53,6 +61,14 @@ export const router = createBrowserRouter([
         ]
       }
     ]
+  },
+  {
+    element: <ProtectedRoute roles={['Admin']} />,
+    children: [{ path: '/admin', element: <AdminPage /> }]
+  },
+  {
+    element: <ProtectedRoute roles={['Contractor']} />,
+    children: [{ path: '/contractor/dashboard', element: <ContractorDashboardPage /> }]
   },
   { path: '*', element: <NotFoundPage /> }
 ]);

@@ -121,6 +121,31 @@ router.post(
   })
 );
 
+router.post(
+  '/change-password',
+  asyncHandler(async (req, res) => {
+    if (!req.session.user) {
+      return fail(res, 401, 'Not authenticated', 'NOT_AUTHENTICATED');
+    }
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return fail(res, 400, 'Current and new password are required', 'MISSING_FIELDS');
+    }
+    if (newPassword.length < 6) {
+      return fail(res, 400, 'New password must be at least six characters', 'WEAK_PASSWORD');
+    }
+
+    const changed = await db.changePassword(req.session.user, currentPassword, newPassword);
+    if (!changed) {
+      return fail(res, 401, 'Current password is incorrect', 'INVALID_CREDENTIALS');
+    }
+
+    const user = await db.loadUser(req.session.user);
+    req.session.user = user;
+    return ok(res, { user: sanitizeUser(user) });
+  })
+);
+
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {

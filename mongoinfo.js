@@ -88,6 +88,68 @@ async function register(email,pass, name, country, bday, phone){
 		return false;
 	}
 }
+
+function generateOneTimePassword(){
+  const chars= 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  let otp= '';
+  for(let i= 0; i < 12; i++){
+    otp+= chars[Math.floor(Math.random() * chars.length)];
+  }
+  return otp;
+}
+
+async function createContractor(email, name){
+  const existing= await users.findOne({email: email});
+  if(existing){
+    return false;
+  }
+
+  const otp= generateOneTimePassword();
+  const new_contractor= {
+    email: email,
+    passw: await hashPassword(otp),
+    name: name,
+    usertype: "Contractor",
+    joindate: new Date().toLocaleString(),
+    verified: true,
+    mustChangePassword: true
+  }
+  await users.insertOne(new_contractor);
+  emails.emailContractorCredentials(new_contractor, otp);
+  return true;
+}
+
+// One-time bootstrap only: there's no UI path to create the first Admin
+// account (registration always sets usertype "customer"), so promoting an
+// existing account by email is done via scripts/promote-admin.js instead.
+async function promoteToAdmin(email){
+  const result= await users.updateOne({email: email}, {$set: {usertype: "Admin"}});
+  return result.matchedCount > 0;
+}
+
+async function changePassword(user, currentPassword, newPassword){
+  const fresh= await users.findOne({'_id': new ObjectID(user._id)});
+  if(!fresh){
+    return false;
+  }
+
+  let matches= false;
+  if(isBcryptHash(fresh.passw)){
+    matches= await bcrypt.compare(currentPassword, fresh.passw);
+  }
+  else{
+    matches= dec(fresh.passw) === currentPassword;
+  }
+  if(!matches){
+    return false;
+  }
+
+  await users.updateOne(
+    {'_id': fresh._id},
+    {$set: {passw: await hashPassword(newPassword)}, $unset: {mustChangePassword: ""}}
+  );
+  return true;
+}
 async function createWebSiteRequest(user, body, type){
   var pgcount;
   var updates;
@@ -412,4 +474,4 @@ async function googleAuth(googleUser){
   
   
 
-module.exports = { register, login, loadRequest, createWebSiteRequest, updateRequest, notifyUpdate, loadNotifications, deleteProject, updateProfile, reset, updateUserAvatar, loadUser, loadArchived, updateNotification, deleteNotification, verify, makeFullPayment, resendVerification, createResetToken, resetPassword, googleAuth, getRequestForPayment};
+module.exports = { register, login, loadRequest, createWebSiteRequest, updateRequest, notifyUpdate, loadNotifications, deleteProject, updateProfile, reset, updateUserAvatar, loadUser, loadArchived, updateNotification, deleteNotification, verify, makeFullPayment, resendVerification, createResetToken, resetPassword, googleAuth, getRequestForPayment, createContractor, changePassword, promoteToAdmin};
